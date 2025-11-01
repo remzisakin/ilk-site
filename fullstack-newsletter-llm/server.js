@@ -95,7 +95,8 @@ app.post('/api/chat', async (req, res) => {
     }
 
     const data = await response.json();
-    const reply = data?.output_text;
+
+    const reply = extractReplyFromResponse(data);
 
     if (!reply) {
       console.error('OpenAI yanıtı beklenen formatta değil:', data);
@@ -108,6 +109,45 @@ app.post('/api/chat', async (req, res) => {
     return res.status(500).json({ error: 'Sunucu hatası' });
   }
 });
+
+function extractReplyFromResponse(data) {
+  if (!data || typeof data !== 'object') {
+    return '';
+  }
+
+  if (typeof data.output_text === 'string' && data.output_text.trim()) {
+    return data.output_text.trim();
+  }
+
+  if (Array.isArray(data.output)) {
+    const collectedText = data.output
+      .flatMap((item) => item?.content ?? [])
+      .filter((contentItem) => typeof contentItem?.text === 'string' && contentItem.text.trim())
+      .map((contentItem) => contentItem.text.trim())
+      .join('\n')
+      .trim();
+
+    if (collectedText) {
+      return collectedText;
+    }
+  }
+
+  if (Array.isArray(data.messages)) {
+    const assistantMessages = data.messages.filter((msg) => msg?.role === 'assistant');
+    const collectedText = assistantMessages
+      .flatMap((msg) => msg?.content ?? [])
+      .filter((contentItem) => typeof contentItem?.text === 'string' && contentItem.text.trim())
+      .map((contentItem) => contentItem.text.trim())
+      .join('\n')
+      .trim();
+
+    if (collectedText) {
+      return collectedText;
+    }
+  }
+
+  return '';
+}
 
 app.listen(PORT, () => {
   console.log(`Sunucu http://localhost:${PORT} adresinde çalışıyor.`);
