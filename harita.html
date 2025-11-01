@@ -3,392 +3,182 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Dünya Haritası | Pocahontas Ayse</title>
-    <style>
-      :root {
-        color-scheme: dark;
-        font-family: 'Segoe UI', 'Poppins', 'Roboto', sans-serif;
-        --khaki-900: #10140b;
-        --khaki-800: #161d0f;
-        --khaki-700: #1f2615;
-        --khaki-500: #3f4a23;
-        --khaki-300: #6f8b3a;
-        --mustard-400: #d4a017;
-        --mustard-300: #f0d98a;
-        background-color: var(--khaki-900);
-        color: #f7f5e8;
-      }
-
-      * {
-        box-sizing: border-box;
-      }
-
-      body {
-        margin: 0;
-        min-height: 100vh;
-        display: flex;
-        justify-content: center;
-        padding: 3rem 1.5rem 4rem;
-        background: radial-gradient(circle at top left, rgba(79, 94, 50, 0.25), transparent 45%),
-          radial-gradient(circle at bottom right, rgba(212, 160, 23, 0.18), transparent 50%), var(--khaki-900);
-      }
-
-      .map-page {
-        width: min(960px, 100%);
-        display: grid;
-        gap: 2.5rem;
-      }
-
-      .page-header {
-        display: flex;
-        flex-direction: column;
-        gap: 0.75rem;
-      }
-
-      .page-header h1 {
-        margin: 0;
-        font-size: clamp(2rem, 5vw, 3rem);
-        letter-spacing: 0.14em;
-        text-transform: uppercase;
-        color: var(--mustard-300);
-      }
-
-      .page-header p {
-        margin: 0;
-        max-width: 640px;
-        color: rgba(244, 239, 214, 0.85);
-        line-height: 1.6;
-      }
-
-      .page-actions {
-        display: flex;
-        gap: 1rem;
-        flex-wrap: wrap;
-      }
-
-      .page-actions a {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        padding: 0.75rem 1.25rem;
-        border-radius: 14px;
-        background: rgba(16, 23, 14, 0.85);
-        border: 1px solid rgba(212, 160, 23, 0.25);
-        text-decoration: none;
-        color: var(--mustard-300);
-        font-weight: 600;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-      }
-
-      .page-actions a:hover,
-      .page-actions a:focus-visible {
-        transform: translateY(-1px);
-        box-shadow: 0 12px 28px rgba(212, 160, 23, 0.2);
-        outline: none;
-      }
-
-      .card {
-        background: rgba(16, 20, 11, 0.85);
-        border: 1px solid rgba(212, 160, 23, 0.18);
-        border-radius: 22px;
-        padding: 2rem;
-        display: grid;
-        gap: 1.75rem;
-        box-shadow: 0 18px 44px rgba(0, 0, 0, 0.3);
-      }
-
-      .card-header {
-        display: grid;
-        gap: 0.75rem;
-      }
-
-      .card-header h2 {
-        margin: 0;
-        font-size: 1.5rem;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-        color: var(--mustard-300);
-      }
-
-      .card-header p {
-        margin: 0;
-        color: rgba(245, 240, 217, 0.75);
-      }
-
-      .map-grid {
-        display: grid;
-        grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
-        gap: 2rem;
-        align-items: start;
-      }
-
-      .map-figure {
-        margin: 0;
-        display: grid;
-        gap: 1rem;
-        padding: 1.25rem;
-        border-radius: 18px;
-        border: 1px solid rgba(212, 160, 23, 0.16);
-        background: linear-gradient(160deg, rgba(22, 29, 15, 0.9), rgba(63, 74, 35, 0.25));
-        box-shadow: inset 0 0 0 1px rgba(111, 139, 58, 0.18);
-        position: relative;
-        overflow: hidden;
-      }
-
-      .map-figure::after {
-        content: '';
-        position: absolute;
-        inset: 12% 18%;
-        border-radius: 40% 45% 50% 55%;
-        background: radial-gradient(circle at top left, rgba(240, 217, 138, 0.18), transparent 60%);
-        pointer-events: none;
-        mix-blend-mode: screen;
-      }
-
-      .map-figure svg {
-        width: 100%;
-        height: auto;
-        display: block;
-        border-radius: 14px;
-        background: radial-gradient(circle at 30% 30%, rgba(63, 74, 35, 0.65), rgba(16, 20, 11, 0.92));
-        border: 1px solid rgba(212, 160, 23, 0.25);
-        box-shadow: 0 24px 60px rgba(0, 0, 0, 0.48);
-        overflow: hidden;
-      }
-
-      .map-figure figcaption {
-        margin: 0;
-        color: rgba(245, 240, 217, 0.75);
-      }
-
-      .map-legend {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-        display: grid;
-        gap: 1rem;
-        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      }
-
-      .map-legend li {
-        display: grid;
-        grid-template-columns: auto 1fr;
-        gap: 1rem;
-        align-items: start;
-        padding: 1rem 1.25rem;
-        border-radius: 16px;
-        border: 1px solid rgba(212, 160, 23, 0.15);
-        background: rgba(22, 30, 18, 0.7);
-        box-shadow: inset 0 0 0 1px rgba(63, 74, 35, 0.22);
-      }
-
-      .legend-marker {
-        width: 18px;
-        height: 18px;
-        border-radius: 50%;
-        background: radial-gradient(circle at 30% 30%, rgba(240, 217, 138, 0.85), rgba(212, 160, 23, 0.65));
-        box-shadow: 0 0 0 2px rgba(212, 160, 23, 0.35);
-        position: relative;
-      }
-
-      .legend-marker::after {
-        content: '';
-        position: absolute;
-        inset: -6px;
-        border-radius: 50%;
-        border: 2px solid rgba(212, 160, 23, 0.25);
-        opacity: 0.8;
-      }
-
-      .map-legend h3 {
-        margin: 0;
-        font-size: 1.05rem;
-        letter-spacing: 0.06em;
-        text-transform: uppercase;
-        color: var(--mustard-300);
-      }
-
-      .map-legend p {
-        margin: 0.5rem 0 0;
-        color: rgba(245, 240, 217, 0.72);
-        line-height: 1.5;
-      }
-
-      .map-figure .ocean {
-        fill: url(#oceanGradient);
-      }
-
-      .map-figure .ocean-sheen {
-        fill: url(#oceanSheen);
-        mix-blend-mode: screen;
-      }
-
-      .map-figure .map-gridlines {
-        mix-blend-mode: soft-light;
-      }
-
-      .map-figure .map-gridline {
-        stroke: rgba(240, 217, 138, 0.16);
-        stroke-width: 0.9;
-        vector-effect: non-scaling-stroke;
-      }
-
-      .map-figure .map-gridline.lat {
-        stroke-dasharray: 6 10;
-      }
-
-      .map-figure .map-gridline.lon {
-        stroke-dasharray: 4 12;
-      }
-
-      .map-figure .map-glow circle {
-        fill: url(#auroraGlow);
-        opacity: 0.22;
-      }
-
-      .map-figure .land {
-        fill: url(#landGradient);
-        stroke: rgba(16, 20, 11, 0.55);
-        stroke-width: 0.75;
-        vector-effect: non-scaling-stroke;
-      }
-
-      .map-figure .map-markers circle {
-        fill: rgba(240, 217, 138, 0.92);
-        stroke: rgba(16, 20, 11, 0.55);
-        stroke-width: 1.5;
-        filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.35));
-      }
-
-      @media (max-width: 768px) {
-        body {
-          padding: 2rem 1rem 3rem;
-        }
-
-        .map-page {
-          gap: 2rem;
-        }
-
-        .map-grid {
-          grid-template-columns: 1fr;
-        }
-      }
-    </style>
+    <title>Harita | Pocahontas Ayse</title>
+    <link rel="stylesheet" href="assets/styles.css" />
   </head>
   <body>
-    <main class="map-page">
-      <header class="page-header">
-        <h1>Dünya Haritası</h1>
-        <p>
-          Pocahontas'ın doğayla kurduğu bağdan ilham alan toplulukları keşfetmeniz için dünya haritasının tam ekran versiyonunu sunuyoruz.
-        </p>
-        <div class="page-actions">
-          <a href="index.html#iletisim">Ana sayfaya geri dön</a>
-        </div>
-      </header>
-
-      <section class="card" aria-labelledby="map-title">
-        <div class="card-header">
-          <h2 id="map-title">Küresel İlham Noktaları</h2>
-          <p>Pocahontas'ın hikâyesinin yankılandığı bölgeleri keşfedin.</p>
-        </div>
-        <div class="map-grid">
-          <figure class="map-figure">
-            <svg viewBox="0 0 800 400" role="img" aria-labelledby="world-map-title world-map-desc">
-              <title id="world-map-title">Dünya haritası</title>
-              <desc id="world-map-desc">Koyu yeşil ve altın tonlarında stilize edilmiş kıtalar ve ilham noktaları.</desc>
+    <div class="app-shell">
+      <nav class="top-bar" aria-label="Birincil">
+        <a class="brand" href="index.html">
+          <span class="brand-art" aria-hidden="true">
+            <svg viewBox="0 0 120 120" role="img" aria-hidden="true">
               <defs>
-                <radialGradient id="oceanGradient" cx="50%" cy="45%" r="82%">
-                  <stop offset="0%" stop-color="#1f2615" stop-opacity="0.95" />
-                  <stop offset="60%" stop-color="#161d0f" stop-opacity="0.9" />
-                  <stop offset="100%" stop-color="#10140b" stop-opacity="1" />
-                </radialGradient>
-                <radialGradient id="oceanSheen" cx="30%" cy="25%" r="85%">
-                  <stop offset="0%" stop-color="#f0d98a" stop-opacity="0.32" />
-                  <stop offset="45%" stop-color="#d4a017" stop-opacity="0.12" />
-                  <stop offset="100%" stop-color="#10140b" stop-opacity="0" />
-                </radialGradient>
-                <linearGradient id="landGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stop-color="#d4a017" stop-opacity="0.9" />
-                  <stop offset="45%" stop-color="#9aa962" stop-opacity="0.88" />
-                  <stop offset="100%" stop-color="#3c4b27" stop-opacity="0.95" />
+                <linearGradient id="hairGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#111810" />
+                  <stop offset="100%" stop-color="#1f2a1b" />
                 </linearGradient>
-                <radialGradient id="auroraGlow" cx="50%" cy="50%" r="60%">
-                  <stop offset="0%" stop-color="#f0d98a" stop-opacity="0.35" />
-                  <stop offset="55%" stop-color="#6f8b3a" stop-opacity="0.18" />
-                  <stop offset="100%" stop-color="#10140b" stop-opacity="0" />
-                </radialGradient>
-                <clipPath id="worldClip">
-                  <rect x="0" y="0" width="800" height="400" rx="24" />
-                </clipPath>
+                <linearGradient id="dressGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#d6b253" />
+                  <stop offset="100%" stop-color="#dca936" />
+                </linearGradient>
               </defs>
-              <g clip-path="url(#worldClip)">
-                <rect class="ocean" x="0" y="0" width="800" height="400" rx="24" />
-                <rect class="ocean-sheen" x="0" y="0" width="800" height="400" rx="24" />
+              <circle cx="60" cy="60" r="56" fill="#283118" stroke="#d4a017" stroke-width="3" />
+              <path
+                d="M38 92c12-4 20-4 44 0l-6-28H44z"
+                fill="url(#dressGradient)"
+                stroke="#f0d98a"
+                stroke-width="2"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M60 74c-10 0-20-10-20-24s10-24 20-24 20 10 20 24-10 24-20 24z"
+                fill="#f8e7c7"
+              />
+              <path d="M40 36c6-6 16-10 20-10s14 2 20 10" fill="url(#hairGradient)" />
+              <path
+                d="M60 74c-10 0-18-10-18-20V38c4-4 11-6 18-6s14 2 18 6v16c0 10-8 20-18 20z"
+                fill="#f8e7c7"
+              />
+              <path d="M42 44c4 4 10 6 18 6s14-2 18-6" stroke="#111" stroke-width="3" stroke-linecap="round" />
+              <circle cx="50" cy="52" r="3" fill="#111" />
+              <circle cx="70" cy="52" r="3" fill="#111" />
+              <path d="M52 64c2 2 6 3 8 3s6-1 8-3" stroke="#111" stroke-width="2" stroke-linecap="round" />
+              <path d="M48 82c4 4 12 6 12 6s8-2 12-6" stroke="#d4a017" stroke-width="2" stroke-linecap="round" />
+              <path d="M30 84c10 12 24 18 30 18s20-6 30-18" stroke="#6f8b3a" stroke-width="4" stroke-linecap="round" />
+            </svg>
+          </span>
+          <span class="brand-name">POCAHONTAS AYSE</span>
+        </a>
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-menu">
+          Menü
+          <span class="toggle-icon" aria-hidden="true"></span>
+        </button>
+        <ul id="primary-menu" class="menu" hidden>
+          <li><a href="index.html">Anasayfa</a></li>
+          <li><a href="hikaye.html">Hikâye</a></li>
+          <li><a href="karakterler.html">Karakterler</a></li>
+          <li><a href="galeri.html">Galeri</a></li>
+          <li><a href="sohbet.html">Sohbet</a></li>
+          <li><a href="harita.html" aria-current="page">Harita</a></li>
+          <li><a href="iletisim.html">İletişim</a></li>
+        </ul>
+      </nav>
+
+      <main class="content" id="harita">
+        <header class="intro">
+          <h1>Harita</h1>
+          <p>Pocahontas Ayse'nin ilham verdiği toplulukların küresel dokunuşlarını keşfedin.</p>
+        </header>
+
+        <section class="card world-map" aria-labelledby="map-title">
+          <div class="card-header">
+            <h2 id="map-title">Dünya Haritası</h2>
+            <p>Koyu yeşil ve altın tonlarında stilize edilen kıtalar ile ilham noktalarını görüntüleyin.</p>
+          </div>
+          <div class="map-grid">
+            <figure class="map-figure">
+              <svg viewBox="0 0 800 400" role="img" aria-labelledby="world-map-title world-map-desc">
+                <title id="world-map-title">Dünya haritası</title>
+                <desc id="world-map-desc">Koyu yeşil ve altın tonlarında stilize edilmiş kıtalar ve ilham noktaları.</desc>
+                <defs>
+                  <radialGradient id="oceanGradient" cx="50%" cy="45%" r="82%">
+                    <stop offset="0%" stop-color="#1f2615" stop-opacity="0.95" />
+                    <stop offset="60%" stop-color="#161d0f" stop-opacity="0.9" />
+                    <stop offset="100%" stop-color="#10140b" stop-opacity="1" />
+                  </radialGradient>
+                  <radialGradient id="oceanSheen" cx="30%" cy="25%" r="85%">
+                    <stop offset="0%" stop-color="#f0d98a" stop-opacity="0.32" />
+                    <stop offset="45%" stop-color="#d4a017" stop-opacity="0.12" />
+                    <stop offset="100%" stop-color="#10140b" stop-opacity="0" />
+                  </radialGradient>
+                  <linearGradient id="landGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#2f3a1a" />
+                    <stop offset="45%" stop-color="#3f4a23" />
+                    <stop offset="100%" stop-color="#6f8b3a" />
+                  </linearGradient>
+                  <radialGradient id="auroraGlow" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stop-color="#d4a017" stop-opacity="0.4" />
+                    <stop offset="100%" stop-color="#d4a017" stop-opacity="0" />
+                  </radialGradient>
+                </defs>
+                <rect width="800" height="400" class="ocean"></rect>
+                <rect width="800" height="400" class="ocean-sheen"></rect>
                 <g class="map-gridlines">
-                  <line class="map-gridline lat" x1="0" y1="66.67" x2="800" y2="66.67" />
-                  <line class="map-gridline lat" x1="0" y1="133.33" x2="800" y2="133.33" />
-                  <line class="map-gridline lat" x1="0" y1="200.00" x2="800" y2="200.00" />
-                  <line class="map-gridline lat" x1="0" y1="266.67" x2="800" y2="266.67" />
-                  <line class="map-gridline lat" x1="0" y1="333.33" x2="800" y2="333.33" />
-                  <line class="map-gridline lon" x1="133.33" y1="0" x2="133.33" y2="400" />
-                  <line class="map-gridline lon" x1="266.67" y1="0" x2="266.67" y2="400" />
-                  <line class="map-gridline lon" x1="400.00" y1="0" x2="400.00" y2="400" />
-                  <line class="map-gridline lon" x1="533.33" y1="0" x2="533.33" y2="400" />
-                  <line class="map-gridline lon" x1="666.67" y1="0" x2="666.67" y2="400" />
+                  <g class="map-gridline lat">
+                    <line x1="0" y1="50" x2="800" y2="50"></line>
+                    <line x1="0" y1="150" x2="800" y2="150"></line>
+                    <line x1="0" y1="250" x2="800" y2="250"></line>
+                    <line x1="0" y1="350" x2="800" y2="350"></line>
+                  </g>
+                  <g class="map-gridline lon">
+                    <line x1="100" y1="0" x2="100" y2="400"></line>
+                    <line x1="250" y1="0" x2="250" y2="400"></line>
+                    <line x1="400" y1="0" x2="400" y2="400"></line>
+                    <line x1="550" y1="0" x2="550" y2="400"></line>
+                    <line x1="700" y1="0" x2="700" y2="400"></line>
+                  </g>
                 </g>
                 <g class="map-glow">
-                  <circle cx="180" cy="160" r="220" />
-                  <circle cx="620" cy="240" r="200" />
+                  <circle cx="300" cy="160" r="120"></circle>
+                  <circle cx="520" cy="200" r="140"></circle>
                 </g>
-                <g class="map-land">
-                  <path class="land" d="M140 170c-10-20-20-40-20-60s10-30 20-40 20-20 40-30 30-10 50-10 50 10 70 20 30 20 40 30 20 30 20 50-10 40-20 50-30 20-50 30-40 10-60 10-40 0-60-10-30-20-40-40z" />
-                  <path class="land" d="M360 220c-10-10-10-30 0-40s20-20 40-20 30 0 50 0 30 0 40 10 20 20 20 30-10 30-20 40-20 20-40 20-30 0-50-10-30-20-40-30z" />
-                  <path class="land" d="M560 180c-10-10-10-30 0-40s20-20 40-20 30 10 40 20 20 20 30 40 10 30 10 40-10 30-20 40-20 20-40 20-30-10-40-20-20-20-30-40-10-30 10-40z" />
-                  <path class="land" d="M640 140c-10-10-20-20-20-30s10-20 20-20 20 0 30 10 20 20 20 30-10 20-20 20-20-10-30-10z" />
+                <g class="landforms">
+                  <path
+                    class="land"
+                    d="M110 200c40-50 120-110 210-110 40 0 80 10 120 30s70 40 90 70c-10 30-40 60-80 80s-90 30-150 30-120-10-160-40-70-70-30-120z"
+                  ></path>
+                  <path
+                    class="land"
+                    d="M470 220c30-40 90-80 150-90 30-5 60 0 90 10s60 30 80 50c0 30-20 60-50 80s-70 30-120 30-100-10-130-30-50-50-20-80z"
+                  ></path>
+                  <path class="land-outline" d="M90 210c50-70 140-130 250-130s210 70 250 150"></path>
+                  <path class="land-outline" d="M460 230c50-60 120-110 210-110"></path>
                 </g>
-                <g class="map-markers">
-                  <circle cx="220" cy="140" r="6" />
-                  <circle cx="420" cy="210" r="6" />
-                  <circle cx="600" cy="170" r="6" />
-                  <circle cx="680" cy="120" r="6" />
+                <g class="map-marker-layer" aria-hidden="true">
+                  <g transform="translate(260 180)">
+                    <circle class="map-marker-core" r="6"></circle>
+                    <circle class="map-marker-ring" r="10"></circle>
+                  </g>
+                  <g transform="translate(520 220)">
+                    <circle class="map-marker-core" r="6"></circle>
+                    <circle class="map-marker-ring" r="10"></circle>
+                  </g>
+                  <g transform="translate(640 160)">
+                    <circle class="map-marker-core" r="6"></circle>
+                    <circle class="map-marker-ring" r="10"></circle>
+                  </g>
                 </g>
-              </g>
-            </svg>
-            <figcaption>Pocahontas'ın ruhunun dokunduğu dünyadaki bağlantı noktaları.</figcaption>
-          </figure>
-          <ul class="map-legend">
-            <li>
-              <span class="legend-marker" aria-hidden="true"></span>
-              <div>
-                <h3>Ormanın Koruyucuları</h3>
-                <p>Kanada'dan Finlandiya'ya uzanan topluluklar, kadim orman bilgeliğini yaşatıyor.</p>
-              </div>
-            </li>
-            <li>
-              <span class="legend-marker" aria-hidden="true"></span>
-              <div>
-                <h3>Güneşin İzinde</h3>
-                <p>Güney Amerika'nın köyleri ve Afrika'nın savanlarında geleneksel ritüeller sürdürülüyor.</p>
-              </div>
-            </li>
-            <li>
-              <span class="legend-marker" aria-hidden="true"></span>
-              <div>
-                <h3>Nehir Rehberleri</h3>
-                <p>Amazon ve Nil boyunca uzanan topluluklar, suyla kurulan bağın bilgisini paylaşıyor.</p>
-              </div>
-            </li>
-            <li>
-              <span class="legend-marker" aria-hidden="true"></span>
-              <div>
-                <h3>Rüzgâr Yolcuları</h3>
-                <p>Pasifik adalarındaki hikâye anlatıcıları, rüzgârın yön verdiği umut mesajlarını iletiyor.</p>
-              </div>
-            </li>
-          </ul>
-        </div>
-      </section>
-    </main>
+              </svg>
+              <figcaption>Pocahontas Ayse topluluklarının ilham noktaları.</figcaption>
+            </figure>
+            <ul class="map-legend">
+              <li>
+                <span class="legend-marker" aria-hidden="true"></span>
+                <div>
+                  <h3>Kabile Kampı</h3>
+                  <p>Ormanın kalbindeki ana toplanma alanı, ruhsal törenlerin merkezi.</p>
+                </div>
+              </li>
+              <li>
+                <span class="legend-marker" aria-hidden="true"></span>
+                <div>
+                  <h3>Nehir Geçidi</h3>
+                  <p>Yeni keşiflere açılan kano rotaları ve dost kabilelerle buluşma noktası.</p>
+                </div>
+              </li>
+              <li>
+                <span class="legend-marker" aria-hidden="true"></span>
+                <div>
+                  <h3>Bilgelik Ağacı</h3>
+                  <p>Grandmother Willow'un rehberliğiyle paylaşılan sırların saklı durağı.</p>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="assets/main.js"></script>
   </body>
 </html>

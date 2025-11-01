@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>POCAHONTAS AYSE | LLM Sohbet Deneyimi</title>
+    <title>Sohbet | Pocahontas Ayse</title>
     <link rel="stylesheet" href="assets/styles.css" />
   </head>
   <body>
@@ -54,39 +54,33 @@
           <span class="toggle-icon" aria-hidden="true"></span>
         </button>
         <ul id="primary-menu" class="menu" hidden>
-          <li><a href="index.html" aria-current="page">Anasayfa</a></li>
+          <li><a href="index.html">Anasayfa</a></li>
           <li><a href="hikaye.html">Hikâye</a></li>
           <li><a href="karakterler.html">Karakterler</a></li>
           <li><a href="galeri.html">Galeri</a></li>
-          <li><a href="sohbet.html">Sohbet</a></li>
+          <li><a href="sohbet.html" aria-current="page">Sohbet</a></li>
           <li><a href="harita.html">Harita</a></li>
           <li><a href="iletisim.html">İletişim</a></li>
         </ul>
       </nav>
 
-      <main class="content" id="anasayfa">
+      <main class="content" id="sohbet">
         <header class="intro">
-          <h1>POCAHONTAS AYSE</h1>
-          <p>
-            Efsanevi kahramanın dünyasına hoş geldiniz. Koyu tonlu bu deneyimde, Pocahontas'ın doğayla iç içe hikâyesini
-            keşfederken yapay zekâ destekli sohbet kutusuyla merak ettiklerinizi sorabilirsiniz.
-          </p>
+          <h1>Sohbet</h1>
+          <p>Merak ettiklerinizi sorun, yapay zekâdan hızlı ve sıcak bir yanıt alın.</p>
         </header>
 
-        <section class="card" aria-labelledby="explore-title">
+        <section class="card chat" aria-labelledby="chat-title">
           <div class="card-header">
-            <h2 id="explore-title">Keşfe Başlayın</h2>
-            <p>
-              Menüdeki sekmeleri kullanarak Pocahontas Ayse evreninin farklı bölümlerini ayrı sayfalarda deneyimleyin. Her
-              tıklamada ilgili sayfa açılır ve içerik yalnızca o sayfada görüntülenir.
-            </p>
+            <h2 id="chat-title">Hadi Benimle Sohbet Et</h2>
+            <p>Sorularınızı yazın, Pocahontas Ayse ile anında bağlantı kurun.</p>
           </div>
-          <div class="story-content">
-            <p>
-              Hikâyeyi okuyun, karakterlerle tanışın, galeriye göz atın veya sohbet kutusu ile etkileşime geçin. Ayrıca dünya
-              haritasını ve iletişim formunu da bağımsız sayfalar hâlinde keşfedebilirsiniz.
-            </p>
+          <div class="chat-controls">
+            <label class="sr-only" for="msg">Mesajınız</label>
+            <input type="text" id="msg" name="msg" placeholder="Mesajınızı yazın" autocomplete="off" />
+            <button id="send">Gönder</button>
           </div>
+          <div id="log" aria-live="polite" role="log"></div>
         </section>
       </main>
     </div>
