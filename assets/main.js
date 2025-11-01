@@ -1,0 +1,156 @@
+const menuToggle = document.querySelector('.menu-toggle');
+const primaryMenu = document.querySelector('#primary-menu');
+
+if (menuToggle && primaryMenu) {
+  const openMenu = () => {
+    if (primaryMenu.classList.contains('is-open')) {
+      return;
+    }
+    primaryMenu.hidden = false;
+    requestAnimationFrame(() => {
+      primaryMenu.classList.add('is-open');
+    });
+  };
+
+  const closeMenu = () => {
+    if (primaryMenu.hidden) return;
+    primaryMenu.classList.remove('is-open');
+  };
+
+  menuToggle.addEventListener('click', () => {
+    const expanded = menuToggle.getAttribute('aria-expanded') === 'true';
+    menuToggle.setAttribute('aria-expanded', String(!expanded));
+    if (expanded) {
+      closeMenu();
+    } else {
+      openMenu();
+    }
+  });
+
+  primaryMenu.addEventListener('transitionend', (event) => {
+    if (event.propertyName === 'max-height' && !primaryMenu.classList.contains('is-open')) {
+      primaryMenu.hidden = true;
+    }
+  });
+
+  document.addEventListener('click', (event) => {
+    if (
+      !primaryMenu.hidden &&
+      !primaryMenu.contains(event.target) &&
+      event.target !== menuToggle &&
+      !menuToggle.contains(event.target)
+    ) {
+      menuToggle.setAttribute('aria-expanded', 'false');
+      closeMenu();
+    }
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && !primaryMenu.hidden) {
+      menuToggle.setAttribute('aria-expanded', 'false');
+      closeMenu();
+    }
+  });
+}
+
+const messageInput = document.querySelector('#msg');
+const sendBtn = document.querySelector('#send');
+const logArea = document.querySelector('#log');
+
+if (sendBtn && messageInput && logArea) {
+  sendBtn.addEventListener('click', handleSendMessage);
+  messageInput.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault();
+      handleSendMessage();
+    }
+  });
+}
+
+async function handleSendMessage() {
+  const userMessage = (messageInput.value || '').trim();
+
+  if (!userMessage) {
+    alert('Lütfen bir mesaj yazın!');
+    messageInput.focus();
+    return;
+  }
+
+  appendLog('Siz', userMessage);
+  messageInput.value = '';
+  sendBtn.disabled = true;
+
+  try {
+    const response = await fetch('/api/chat', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ message: userMessage }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      const errorMessage = errorData.error || 'Sunucu hatası veya API anahtarı eksik.';
+      appendLog('Sistem', errorMessage, true);
+      return;
+    }
+
+    const data = await response.json();
+    appendLog('Asistan', data.reply || 'Yanıt alınamadı.');
+  } catch (error) {
+    console.error('Sohbet isteği başarısız:', error);
+    appendLog('Sistem', 'Sunucu hatası veya API anahtarı eksik.', true);
+  } finally {
+    sendBtn.disabled = false;
+    messageInput.focus();
+  }
+}
+
+function appendLog(author, message, isError = false) {
+  const paragraph = document.createElement('p');
+  const prefix = document.createElement('strong');
+  prefix.textContent = `${author}: `;
+  paragraph.appendChild(prefix);
+  paragraph.append(message);
+
+  if (isError) {
+    paragraph.style.color = '#f7b7a3';
+  }
+
+  logArea.appendChild(paragraph);
+  logArea.scrollTop = logArea.scrollHeight;
+}
+
+const newsletterForm = document.querySelector('#newsletter-form');
+const newsletterFeedback = document.querySelector('#newsletter-feedback');
+
+if (newsletterForm && newsletterFeedback) {
+  newsletterForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const emailInput = newsletterForm.querySelector('#email');
+    const email = (emailInput.value || '').trim();
+
+    if (!email) {
+      setNewsletterFeedback('Lütfen bir e-posta adresi girin.', true);
+      emailInput.focus();
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setNewsletterFeedback('Geçerli bir e-posta adresi girin.', true);
+      emailInput.focus();
+      return;
+    }
+
+    setNewsletterFeedback('Teşekkürler! Bültene başarıyla katıldınız.', false);
+    emailInput.value = '';
+    emailInput.focus();
+  });
+}
+
+function setNewsletterFeedback(message, isError) {
+  newsletterFeedback.textContent = message;
+  newsletterFeedback.className = isError ? 'newsletter-error' : 'newsletter-success';
+}

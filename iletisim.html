@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>POCAHONTAS AYSE | LLM Sohbet Deneyimi</title>
+    <title>İletişim | Pocahontas Ayse</title>
     <link rel="stylesheet" href="assets/styles.css" />
   </head>
   <body>
@@ -54,37 +54,41 @@
           <span class="toggle-icon" aria-hidden="true"></span>
         </button>
         <ul id="primary-menu" class="menu" hidden>
-          <li><a href="index.html" aria-current="page">Anasayfa</a></li>
+          <li><a href="index.html">Anasayfa</a></li>
           <li><a href="hikaye.html">Hikâye</a></li>
           <li><a href="karakterler.html">Karakterler</a></li>
           <li><a href="galeri.html">Galeri</a></li>
           <li><a href="sohbet.html">Sohbet</a></li>
           <li><a href="harita.html">Harita</a></li>
-          <li><a href="iletisim.html">İletişim</a></li>
+          <li><a href="iletisim.html" aria-current="page">İletişim</a></li>
         </ul>
       </nav>
 
-      <main class="content" id="anasayfa">
+      <main class="content" id="iletisim">
         <header class="intro">
-          <h1>POCAHONTAS AYSE</h1>
-          <p>
-            Efsanevi kahramanın dünyasına hoş geldiniz. Koyu tonlu bu deneyimde, Pocahontas'ın doğayla iç içe hikâyesini
-            keşfederken yapay zekâ destekli sohbet kutusuyla merak ettiklerinizi sorabilirsiniz.
-          </p>
+          <h1>İletişim</h1>
+          <p>Toplulukla bağlantıda kalın ve yeni gelişmelerden haberdar olun.</p>
         </header>
 
-        <section class="card" aria-labelledby="explore-title">
+        <section class="card contact-card" aria-labelledby="newsletter-title">
           <div class="card-header">
-            <h2 id="explore-title">Keşfe Başlayın</h2>
-            <p>
-              Menüdeki sekmeleri kullanarak Pocahontas Ayse evreninin farklı bölümlerini ayrı sayfalarda deneyimleyin. Her
-              tıklamada ilgili sayfa açılır ve içerik yalnızca o sayfada görüntülenir.
-            </p>
+            <h2 id="newsletter-title">Bültene Katılın</h2>
+            <p>Yeni hikâyeler, sanat eserleri ve etkinliklerden ilk siz haberdar olun.</p>
           </div>
+          <form class="newsletter-form" id="newsletter-form" novalidate>
+            <label for="email">E-posta adresiniz</label>
+            <input type="email" id="email" name="email" placeholder="ornek@pocahontas.com" autocomplete="email" required />
+            <button type="submit">Katıl</button>
+            <p id="newsletter-feedback" role="status" aria-live="polite"></p>
+          </form>
           <div class="story-content">
             <p>
-              Hikâyeyi okuyun, karakterlerle tanışın, galeriye göz atın veya sohbet kutusu ile etkileşime geçin. Ayrıca dünya
-              haritasını ve iletişim formunu da bağımsız sayfalar hâlinde keşfedebilirsiniz.
+              Sorularınız mı var? Bültenimize katıldığınızda düzenli olarak etkinlik davetleri ve topluluk buluşmalarından
+              haberdar olursunuz. Harita sekmesinden ise dünya genelindeki ilham noktalarımıza göz atabilirsiniz.
+            </p>
+            <p>
+              Daha fazla destek için <a href="mailto:destek@pocahontasayse.com">destek@pocahontasayse.com</a> adresinden
+              bize ulaşabilirsiniz.
             </p>
           </div>
         </section>
