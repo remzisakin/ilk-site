@@ -159,6 +159,23 @@
         display: grid;
         gap: 0.25rem;
         min-width: 220px;
+        overflow: hidden;
+        max-height: 0;
+        opacity: 0;
+        transform: translateY(-0.75rem);
+        pointer-events: none;
+        transition: max-height 0.35s ease, opacity 0.25s ease, transform 0.35s ease;
+      }
+
+      .menu.is-open {
+        max-height: 480px;
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: auto;
+      }
+
+      .menu[hidden] {
+        display: none;
       }
 
       .menu li {
@@ -216,6 +233,65 @@
         display: grid;
         gap: 1.5rem;
         box-shadow: 0 18px 44px rgba(0, 0, 0, 0.3);
+      }
+
+      .story-content {
+        display: grid;
+        gap: 1rem;
+        color: rgba(245, 240, 217, 0.8);
+        line-height: 1.7;
+      }
+
+      .character-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 1rem;
+      }
+
+      .character-card {
+        background: rgba(22, 30, 18, 0.65);
+        border-radius: 16px;
+        padding: 1.25rem;
+        border: 1px solid rgba(212, 160, 23, 0.15);
+        box-shadow: inset 0 0 0 1px rgba(63, 74, 35, 0.25);
+        display: grid;
+        gap: 0.5rem;
+      }
+
+      .character-card h3 {
+        margin: 0;
+        font-size: 1.1rem;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        color: var(--mustard-300);
+      }
+
+      .gallery-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: 1rem;
+      }
+
+      .gallery-item {
+        background: linear-gradient(135deg, rgba(212, 160, 23, 0.12), rgba(111, 139, 58, 0.15));
+        border-radius: 16px;
+        border: 1px solid rgba(212, 160, 23, 0.15);
+        padding: 1rem;
+        display: grid;
+        gap: 0.75rem;
+        box-shadow: inset 0 0 0 1px rgba(63, 74, 35, 0.2);
+      }
+
+      .gallery-illustration {
+        border-radius: 12px;
+        aspect-ratio: 4 / 3;
+        background: radial-gradient(circle at 30% 30%, rgba(240, 217, 138, 0.65), rgba(31, 38, 21, 0.6)),
+          linear-gradient(180deg, rgba(63, 74, 35, 0.65), rgba(16, 20, 11, 0.85));
+      }
+
+      .gallery-item figcaption {
+        margin: 0;
+        color: rgba(245, 240, 217, 0.8);
       }
 
       .card-header h2 {
@@ -380,6 +456,14 @@
           left: 1.5rem;
           right: 1.5rem;
         }
+
+        .character-list {
+          grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        }
+
+        .gallery-grid {
+          grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        }
       }
     </style>
   </head>
@@ -449,9 +533,76 @@
           </p>
         </header>
 
+        <section class="card" aria-labelledby="story-title" id="hikaye">
+          <div class="card-header">
+            <h2 id="story-title">Hikâye</h2>
+            <p>Pocahontas'ın doğayla uyumlu yolculuğunun öne çıkan anları.</p>
+          </div>
+          <div class="story-content">
+            <p>
+              Pocahontas, kabilesinin bilgeliğini taşıyan genç bir lider olarak ormanların ve nehirlerin ritmini takip eder.
+              Doğaya olan sezgisel bağını, değişime açık kalbiyle birleştirerek insanlar ve toprak arasında köprü kurar.
+            </p>
+            <p>
+              Ziyaretçiler bu deneyimde, onun ruh eşliği ettiği rüzgârları ve fısıltıları dinlerken kendi iç seslerine kulak verme
+              fırsatı bulurlar.
+            </p>
+          </div>
+        </section>
+
+        <section class="card" aria-labelledby="characters-title" id="karakterler">
+          <div class="card-header">
+            <h2 id="characters-title">Karakterler</h2>
+            <p>Pocahontas'ın hikâyesini şekillendiren yol arkadaşlarıyla tanışın.</p>
+          </div>
+          <div class="character-list">
+            <article class="character-card">
+              <h3>Pocahontas</h3>
+              <p>Doğayla uyum içinde yaşayan ve kabilesinin geleceğini korumak için cesur kararlar alan genç lider.</p>
+            </article>
+            <article class="character-card">
+              <h3>Meeko</h3>
+              <p>Yaramaz rakun dost, maceranın her anına neşe katan pratik zekâsıyla bilinir.</p>
+            </article>
+            <article class="character-card">
+              <h3>Grandmother Willow</h3>
+              <p>Ormanın bilge ruhu; hikâyedeki karmaşık duyguları sakinleştiren, rehberlik eden kadim bir ses.</p>
+            </article>
+            <article class="character-card">
+              <h3>John Smith</h3>
+              <p>Yeni ufuklar arayan kâşif; Pocahontas'ın dünyasını merakla keşfederken empatiyi öğrenir.</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="card" aria-labelledby="gallery-title" id="galeri">
+          <div class="card-header">
+            <h2 id="gallery-title">Galeri</h2>
+            <p>Pocahontas evreninden seçilmiş anları stilize illüstrasyonlarla keşfedin.</p>
+          </div>
+          <div class="gallery-grid">
+            <figure class="gallery-item">
+              <div class="gallery-illustration" aria-hidden="true"></div>
+              <figcaption>Şelale kıyısında, rüzgârla dans eden yaprakların huzurlu buluşması.</figcaption>
+            </figure>
+            <figure class="gallery-item">
+              <div class="gallery-illustration" aria-hidden="true"></div>
+              <figcaption>Ay ışığının aydınlattığı ormanda kabile ateşinin sıcak parıltısı.</figcaption>
+            </figure>
+            <figure class="gallery-item">
+              <div class="gallery-illustration" aria-hidden="true"></div>
+              <figcaption>Nehir üzerinde süzülen kano, bilinmeyen diyarlara uzanan yolu işaret ediyor.</figcaption>
+            </figure>
+            <figure class="gallery-item">
+              <div class="gallery-illustration" aria-hidden="true"></div>
+              <figcaption>Grandmother Willow'un dalları arasında paylaşılan bilgece sırlar.</figcaption>
+            </figure>
+          </div>
+        </section>
+
         <section class="card chat" aria-labelledby="chat-title" id="sohbet">
           <div class="card-header">
-            <h2 id="chat-title">LLM Sohbet Kutusu</h2>
+            <h2 id="chat-title">Hadi Benimle Sohbet Et</h2>
             <p>Merak ettiklerinizi sorun, yapay zekâdan hızlı ve sıcak bir yanıt alın.</p>
           </div>
           <div class="chat-controls">
@@ -482,10 +633,35 @@
       const primaryMenu = document.querySelector('#primary-menu');
 
       if (menuToggle && primaryMenu) {
+        const openMenu = () => {
+          if (primaryMenu.classList.contains('is-open')) {
+            return;
+          }
+          primaryMenu.hidden = false;
+          requestAnimationFrame(() => {
+            primaryMenu.classList.add('is-open');
+          });
+        };
+
+        const closeMenu = () => {
+          if (primaryMenu.hidden) return;
+          primaryMenu.classList.remove('is-open');
+        };
+
         menuToggle.addEventListener('click', () => {
           const expanded = menuToggle.getAttribute('aria-expanded') === 'true';
           menuToggle.setAttribute('aria-expanded', String(!expanded));
-          primaryMenu.hidden = expanded;
+          if (expanded) {
+            closeMenu();
+          } else {
+            openMenu();
+          }
+        });
+
+        primaryMenu.addEventListener('transitionend', (event) => {
+          if (event.propertyName === 'max-height' && !primaryMenu.classList.contains('is-open')) {
+            primaryMenu.hidden = true;
+          }
         });
 
         document.addEventListener('click', (event) => {
@@ -495,8 +671,15 @@
             event.target !== menuToggle &&
             !menuToggle.contains(event.target)
           ) {
-            primaryMenu.hidden = true;
             menuToggle.setAttribute('aria-expanded', 'false');
+            closeMenu();
+          }
+        });
+
+        document.addEventListener('keydown', (event) => {
+          if (event.key === 'Escape' && !primaryMenu.hidden) {
+            menuToggle.setAttribute('aria-expanded', 'false');
+            closeMenu();
           }
         });
       }
