@@ -1,0 +1,114 @@
+import express from 'express';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import fetch from 'node-fetch';
+import { appendFile, access, constants as fsConstants } from 'fs/promises';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+// Ortam değişkenlerini yükle
+dotenv.config();
+
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+if (!OPENAI_API_KEY) {
+  console.warn('Uyarı: OPENAI_API_KEY bulunamadı. /api/chat uç noktası çalışmayacaktır.');
+}
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const app = express();
+const PORT = process.env.PORT || 3000;
+const subscribersFilePath = path.join(__dirname, 'data', 'subscribers.csv');
+
+app.use(cors());
+app.use(express.json());
+app.use(express.static(path.join(__dirname, 'public')));
+
+async function ensureSubscribersFile() {
+  try {
+    await access(subscribersFilePath, fsConstants.F_OK);
+  } catch (err) {
+    // Dosya yoksa başlık satırı ile oluştur.
+    await appendFile(subscribersFilePath, 'email,created_at\n');
+  }
+}
+
+// Sunucu başlarken abonelik dosyasının var olduğundan emin ol.
+ensureSubscribersFile().catch((error) => {
+  console.error('Abonelik dosyası oluşturulamadı:', error);
+});
+
+app.post('/api/subscribe', async (req, res) => {
+  const { email } = req.body ?? {};
+
+  if (!email || typeof email !== 'string') {
+    return res.status(400).json({ error: 'Geçerli bir e-posta adresi girin.' });
+  }
+
+  const trimmedEmail = email.trim();
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  if (!trimmedEmail || !emailRegex.test(trimmedEmail)) {
+    return res.status(400).json({ error: 'Geçerli bir e-posta adresi girin.' });
+  }
+
+  const now = new Date().toISOString();
+  const line = `"${trimmedEmail.replace(/"/g, '""')}",${now}\n`;
+
+  try {
+    await appendFile(subscribersFilePath, line, 'utf8');
+    return res.json({ ok: true, message: 'Teşekkürler!' });
+  } catch (error) {
+    console.error('Abonelik kaydı yazılamadı:', error);
+    return res.status(500).json({ error: 'Sunucu hatası' });
+  }
+});
+
+app.post('/api/chat', async (req, res) => {
+  const { message } = req.body ?? {};
+
+  if (!message || typeof message !== 'string' || !message.trim()) {
+    return res.status(400).json({ error: 'Lütfen bir mesaj yazın.' });
+  }
+
+  if (!OPENAI_API_KEY) {
+    return res.status(500).json({ error: 'Sunucu yapılandırması eksik: OPENAI_API_KEY bulunamadı.' });
+  }
+
+  try {
+    const response = await fetch('https://api.openai.com/v1/responses', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${OPENAI_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: 'gpt-4o-mini',
+        input: `Kullanıcı dedi ki: "${message}". Kısa, anlaşılır ve Türkçe cevap ver.`,
+      }),
+    });
+
+    if (!response.ok) {
+      console.error('OpenAI API hatası:', response.status, await response.text());
+      return res.status(500).json({ error: 'Sunucu hatası' });
+    }
+
+    const data = await response.json();
+    const reply = data?.output_text;
+
+    if (!reply) {
+      console.error('OpenAI yanıtı beklenen formatta değil:', data);
+      return res.status(500).json({ error: 'Sunucu hatası' });
+    }
+
+    return res.json({ reply });
+  } catch (error) {
+    console.error('OpenAI API isteği başarısız:', error);
+    return res.status(500).json({ error: 'Sunucu hatası' });
+  }
+});
+
+app.listen(PORT, () => {
+  console.log(`Sunucu http://localhost:${PORT} adresinde çalışıyor.`);
+});

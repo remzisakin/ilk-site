@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bülten ve Sohbet</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="container">
+      <header>
+        <h1>Hoş geldiniz! Bülten + LLM Sohbet Deneyimi</h1>
+        <p>Hem bültenimize katılın hem de yapay zekâ ile sohbet edin.</p>
+      </header>
+
+      <section class="card" aria-labelledby="newsletter-title">
+        <h2 id="newsletter-title">Bültenimize Katılın</h2>
+        <p>Bültenimize kaydolmak için e-posta adresinizi girmeniz yeterli.</p>
+        <form id="newsletterForm" novalidate>
+          <label for="email">E-posta</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="E-posta adresiniz"
+            required
+            autocomplete="email"
+          />
+          <button type="submit" id="subscribeBtn">Gönder</button>
+        </form>
+        <p id="thanks" aria-live="polite" class="feedback" role="status"></p>
+      </section>
+
+      <section class="card" aria-labelledby="chat-title">
+        <h2 id="chat-title">LLM Sohbet Kutusu</h2>
+        <p>Merak ettiklerinizi sorun, yapay zekâdan kısa ve net bir yanıt alın.</p>
+        <div class="chat-controls">
+          <label class="sr-only" for="msg">Mesajınız</label>
+          <input
+            type="text"
+            id="msg"
+            name="msg"
+            placeholder="Mesajınızı yazın"
+            autocomplete="off"
+          />
+          <button id="send">Gönder</button>
+        </div>
+        <div id="log" aria-live="polite" role="log"></div>
+      </section>
+    </main>
+
+    <script src="app.js" defer></script>
+  </body>
+</html>
