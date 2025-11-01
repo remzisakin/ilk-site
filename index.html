@@ -671,9 +671,9 @@
           <li><a href="#hikaye">Hikâye</a></li>
           <li><a href="#karakterler">Karakterler</a></li>
           <li><a href="#galeri">Galeri</a></li>
-          <li><a href="#harita">Dünya Haritası</a></li>
           <li><a href="#sohbet">Sohbet</a></li>
           <li><a href="#iletisim">İletişim</a></li>
+          <li><a href="#harita">Dünya Haritası</a></li>
         </ul>
       </nav>
 
@@ -751,6 +751,32 @@
               <figcaption>Grandmother Willow'un dalları arasında paylaşılan bilgece sırlar.</figcaption>
             </figure>
           </div>
+        </section>
+
+        <section class="card chat" aria-labelledby="chat-title" id="sohbet">
+          <div class="card-header">
+            <h2 id="chat-title">Hadi Benimle Sohbet Et</h2>
+            <p>Merak ettiklerinizi sorun, yapay zekâdan hızlı ve sıcak bir yanıt alın.</p>
+          </div>
+          <div class="chat-controls">
+            <label class="sr-only" for="msg">Mesajınız</label>
+            <input type="text" id="msg" name="msg" placeholder="Mesajınızı yazın" autocomplete="off" />
+            <button id="send">Gönder</button>
+          </div>
+          <div id="log" aria-live="polite" role="log"></div>
+        </section>
+
+        <section class="card" aria-labelledby="newsletter-title" id="iletisim">
+          <div class="card-header">
+            <h2 id="newsletter-title">Bültene Katılın</h2>
+            <p>Yeni hikâyeler, sanat eserleri ve etkinliklerden ilk siz haberdar olun.</p>
+          </div>
+          <form class="newsletter-form" id="newsletter-form" novalidate>
+            <label for="email">E-posta adresiniz</label>
+            <input type="email" id="email" name="email" placeholder="ornek@pocahontas.com" autocomplete="email" required />
+            <button type="submit">Katıl</button>
+            <p id="newsletter-feedback" role="status" aria-live="polite"></p>
+          </form>
         </section>
 
         <section class="card world-map" aria-labelledby="map-title" id="harita">
@@ -843,32 +869,6 @@
               </li>
             </ul>
           </div>
-        </section>
-
-        <section class="card chat" aria-labelledby="chat-title" id="sohbet">
-          <div class="card-header">
-            <h2 id="chat-title">Hadi Benimle Sohbet Et</h2>
-            <p>Merak ettiklerinizi sorun, yapay zekâdan hızlı ve sıcak bir yanıt alın.</p>
-          </div>
-          <div class="chat-controls">
-            <label class="sr-only" for="msg">Mesajınız</label>
-            <input type="text" id="msg" name="msg" placeholder="Mesajınızı yazın" autocomplete="off" />
-            <button id="send">Gönder</button>
-          </div>
-          <div id="log" aria-live="polite" role="log"></div>
-        </section>
-
-        <section class="card" aria-labelledby="newsletter-title" id="iletisim">
-          <div class="card-header">
-            <h2 id="newsletter-title">Bültene Katılın</h2>
-            <p>Yeni hikâyeler, sanat eserleri ve etkinliklerden ilk siz haberdar olun.</p>
-          </div>
-          <form class="newsletter-form" id="newsletter-form" novalidate>
-            <label for="email">E-posta adresiniz</label>
-            <input type="email" id="email" name="email" placeholder="ornek@pocahontas.com" autocomplete="email" required />
-            <button type="submit">Katıl</button>
-            <p id="newsletter-feedback" role="status" aria-live="polite"></p>
-          </form>
         </section>
       </main>
     </div>
