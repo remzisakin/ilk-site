@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Benim İlk Sitem</title>
+  <style>
+    body { font-family: system-ui, Arial, sans-serif; margin: 0; }
+    header { background: #1e88e5; color: white; padding: 32px; text-align: center; }
+    main { max-width: 720px; margin: 24px auto; padding: 0 16px; }
+    .card { border: 1px solid #eee; border-radius: 12px; padding: 20px; box-shadow: 0 6px 16px rgba(0,0,0,.06); }
+    button { padding: 12px 16px; border-radius: 10px; border: none; cursor: pointer; }
+    button:hover { opacity: .9; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Hoş geldiniz! 👋</h1>
+    <p>Bu benim ilk web sitem.</p>
+  </header>
+
+  <main>
+    <div class="card">
+      <h2>Neler yapabilir?</h2>
+      <p>Bu sayfayı tamamen doğal dille anlatarak ChatGPT Codex yardımıyla geliştirebilirim.</p>
+      <button id="helloBtn">Bana tıkla</button>
+      <p id="out" style="margin-top:12px;color:#1e88e5;"></p>
+<!-- Bülten formu -->
+<div style="margin-top:20px;">
+  <h3>Bültenimize katıl 📬</h3>
+  <input id="email" type="email" placeholder="E-posta adresiniz" style="padding:8px; border-radius:8px; border:1px solid #ccc;">
+  <button id="subscribeBtn">Gönder</button>
+  <p id="thanks" style="color:green; margin-top:8px;"></p>
+</div>
+
+    </div>
+  </main>
+
+  <script>
+    document.getElementById('helloBtn').addEventListener('click', () => {
+      document.getElementById('out').textContent = "Butona tıkladın! 🎉";
+    });
+// Bülten formu için davranış
+document.getElementById('subscribeBtn').addEventListener('click', () => {
+  const email = document.getElementById('email').value.trim();
+  if (email === "") {
+    alert("Lütfen e-posta adresinizi girin!");
+  } else {
+    document.getElementById('thanks').textContent = "Teşekkürler!";
+    document.getElementById('email').value = ""; // kutuyu temizle
+  }
+});
+
+  </script>
+</body>
+</html>
