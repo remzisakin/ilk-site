@@ -1,56 +1,607 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="tr">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Benim İlk Sitem</title>
-  <style>
-    body { font-family: system-ui, Arial, sans-serif; margin: 0; }
-    header { background: #1e88e5; color: white; padding: 32px; text-align: center; }
-    main { max-width: 720px; margin: 24px auto; padding: 0 16px; }
-    .card { border: 1px solid #eee; border-radius: 12px; padding: 20px; box-shadow: 0 6px 16px rgba(0,0,0,.06); }
-    button { padding: 12px 16px; border-radius: 10px; border: none; cursor: pointer; }
-    button:hover { opacity: .9; }
-  </style>
-</head>
-<body>
-  <header>
-    <h1>Hoş geldiniz! 👋</h1>
-    <p>Bu benim ilk web sitem.</p>
-  </header>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>POCAHONTAS | LLM Sohbet Deneyimi</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        font-family: 'Segoe UI', 'Poppins', 'Roboto', sans-serif;
+        --khaki-900: #10140b;
+        --khaki-800: #161d0f;
+        --khaki-700: #1f2615;
+        --khaki-500: #3f4a23;
+        --khaki-300: #6f8b3a;
+        --mustard-400: #d4a017;
+        --mustard-300: #f0d98a;
+        background-color: var(--khaki-900);
+        color: #f7f5e8;
+      }
 
-  <main>
-    <div class="card">
-      <h2>Neler yapabilir?</h2>
-      <p>Bu sayfayı tamamen doğal dille anlatarak ChatGPT Codex yardımıyla geliştirebilirim.</p>
-      <button id="helloBtn">Bana tıkla</button>
-      <p id="out" style="margin-top:12px;color:#1e88e5;"></p>
-<!-- Bülten formu -->
-<div style="margin-top:20px;">
-  <h3>Bültenimize katıl 📬</h3>
-  <input id="email" type="email" placeholder="E-posta adresiniz" style="padding:8px; border-radius:8px; border:1px solid #ccc;">
-  <button id="subscribeBtn">Gönder</button>
-  <p id="thanks" style="color:green; margin-top:8px;"></p>
-</div>
+      * {
+        box-sizing: border-box;
+      }
 
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background: radial-gradient(circle at top left, rgba(79, 94, 50, 0.25), transparent 45%),
+          radial-gradient(circle at bottom right, rgba(212, 160, 23, 0.18), transparent 50%), var(--khaki-900);
+        color: #f7f5e8;
+        display: flex;
+        justify-content: center;
+        padding: 3rem 1.5rem 4rem;
+      }
+
+      .app-shell {
+        width: min(960px, 100%);
+        display: flex;
+        flex-direction: column;
+        gap: 2.5rem;
+      }
+
+      .top-bar {
+        position: sticky;
+        top: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 1.25rem;
+        padding: 1rem 1.5rem;
+        border-radius: 18px;
+        background: rgba(31, 38, 21, 0.85);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(212, 160, 23, 0.25);
+        box-shadow: 0 18px 48px rgba(0, 0, 0, 0.35);
+        z-index: 10;
+      }
+
+      .brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.85rem;
+        text-decoration: none;
+        color: inherit;
+      }
+
+      .brand-art {
+        display: inline-flex;
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+        overflow: hidden;
+        background: rgba(15, 23, 15, 0.8);
+        box-shadow: 0 0 0 3px rgba(212, 160, 23, 0.4), 0 10px 18px rgba(0, 0, 0, 0.45);
+      }
+
+      .brand-art svg {
+        width: 100%;
+        height: 100%;
+      }
+
+      .brand-name {
+        font-weight: 700;
+        letter-spacing: 0.18em;
+        font-size: 1.1rem;
+        text-transform: uppercase;
+      }
+
+      .menu-toggle {
+        margin-left: auto;
+        background: linear-gradient(135deg, rgba(212, 160, 23, 0.85), rgba(111, 139, 58, 0.95));
+        color: #10140b;
+        font-weight: 700;
+        border: none;
+        padding: 0.75rem 1.2rem;
+        border-radius: 14px;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.6rem;
+        box-shadow: 0 14px 30px rgba(212, 160, 23, 0.25);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .menu-toggle:hover,
+      .menu-toggle:focus-visible {
+        transform: translateY(-1px);
+        box-shadow: 0 16px 32px rgba(212, 160, 23, 0.35);
+      }
+
+      .menu-toggle:focus-visible {
+        outline: 2px solid var(--mustard-400);
+        outline-offset: 4px;
+      }
+
+      .toggle-icon {
+        position: relative;
+        width: 18px;
+        height: 12px;
+      }
+
+      .toggle-icon::before,
+      .toggle-icon::after,
+      .toggle-icon {
+        background: currentColor;
+        border-radius: 999px;
+        display: block;
+        content: '';
+      }
+
+      .toggle-icon::before,
+      .toggle-icon::after {
+        position: absolute;
+        left: 0;
+        width: 18px;
+        height: 2px;
+        background: currentColor;
+      }
+
+      .toggle-icon::before {
+        top: 0;
+      }
+
+      .toggle-icon::after {
+        bottom: 0;
+      }
+
+      .menu {
+        position: absolute;
+        top: calc(100% + 0.75rem);
+        right: 1.5rem;
+        list-style: none;
+        padding: 0.75rem;
+        margin: 0;
+        border-radius: 16px;
+        background: rgba(18, 24, 14, 0.95);
+        border: 1px solid rgba(212, 160, 23, 0.35);
+        box-shadow: 0 18px 38px rgba(0, 0, 0, 0.45);
+        display: grid;
+        gap: 0.25rem;
+        min-width: 220px;
+      }
+
+      .menu li {
+        border-radius: 10px;
+      }
+
+      .menu a {
+        display: block;
+        padding: 0.65rem 0.85rem;
+        text-decoration: none;
+        color: #f5f2d7;
+        font-weight: 600;
+        border-radius: 10px;
+        transition: background 0.2s ease, color 0.2s ease;
+      }
+
+      .menu a:hover,
+      .menu a:focus-visible {
+        background: rgba(212, 160, 23, 0.12);
+        color: var(--mustard-300);
+        outline: none;
+      }
+
+      .content {
+        background: linear-gradient(145deg, rgba(22, 29, 15, 0.92), rgba(34, 43, 22, 0.92));
+        border-radius: 28px;
+        padding: 3rem;
+        border: 1px solid rgba(111, 139, 58, 0.25);
+        box-shadow: 0 25px 55px rgba(0, 0, 0, 0.4);
+        display: flex;
+        flex-direction: column;
+        gap: 2.25rem;
+      }
+
+      .intro h1 {
+        margin: 0;
+        font-size: clamp(2.25rem, 5vw, 3.25rem);
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--mustard-300);
+      }
+
+      .intro p {
+        margin: 1rem 0 0;
+        max-width: 600px;
+        color: rgba(244, 239, 214, 0.88);
+        line-height: 1.6;
+      }
+
+      .card {
+        background: rgba(16, 20, 11, 0.85);
+        border: 1px solid rgba(212, 160, 23, 0.18);
+        border-radius: 22px;
+        padding: 2rem;
+        display: grid;
+        gap: 1.5rem;
+        box-shadow: 0 18px 44px rgba(0, 0, 0, 0.3);
+      }
+
+      .card-header h2 {
+        margin: 0;
+        font-size: 1.5rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--mustard-300);
+      }
+
+      .card-header p {
+        margin: 0.75rem 0 0;
+        color: rgba(245, 240, 217, 0.75);
+      }
+
+      .chat-controls {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+      }
+
+      .chat-controls input[type='text'] {
+        flex: 1;
+        background: rgba(19, 28, 16, 0.92);
+        border: 1px solid rgba(212, 160, 23, 0.2);
+        border-radius: 14px;
+        padding: 0.85rem 1rem;
+        color: inherit;
+        font-size: 1rem;
+        transition: border-color 0.2s ease;
+      }
+
+      .chat-controls input[type='text']:focus {
+        outline: none;
+        border-color: rgba(212, 160, 23, 0.45);
+        box-shadow: 0 0 0 3px rgba(212, 160, 23, 0.12);
+      }
+
+      .chat-controls button {
+        background: linear-gradient(135deg, rgba(212, 160, 23, 0.95), rgba(111, 139, 58, 0.95));
+        border: none;
+        border-radius: 14px;
+        padding: 0.85rem 1.5rem;
+        font-weight: 700;
+        cursor: pointer;
+        color: #10140b;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        box-shadow: 0 14px 30px rgba(212, 160, 23, 0.25);
+      }
+
+      .chat-controls button:hover,
+      .chat-controls button:focus-visible {
+        transform: translateY(-1px);
+        box-shadow: 0 16px 32px rgba(212, 160, 23, 0.35);
+        outline: none;
+      }
+
+      #log {
+        min-height: 160px;
+        max-height: 280px;
+        overflow-y: auto;
+        padding: 1rem;
+        background: rgba(17, 24, 14, 0.85);
+        border-radius: 16px;
+        border: 1px solid rgba(212, 160, 23, 0.18);
+        display: grid;
+        gap: 0.75rem;
+      }
+
+      #log p {
+        margin: 0;
+        line-height: 1.5;
+      }
+
+      .newsletter-form {
+        display: grid;
+        gap: 1rem;
+      }
+
+      .newsletter-form label {
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: rgba(245, 240, 217, 0.75);
+      }
+
+      .newsletter-form input[type='email'] {
+        background: rgba(19, 28, 16, 0.92);
+        border: 1px solid rgba(212, 160, 23, 0.2);
+        border-radius: 14px;
+        padding: 0.85rem 1rem;
+        color: inherit;
+        font-size: 1rem;
+      }
+
+      .newsletter-form input[type='email']:focus {
+        outline: none;
+        border-color: rgba(212, 160, 23, 0.45);
+        box-shadow: 0 0 0 3px rgba(212, 160, 23, 0.12);
+      }
+
+      .newsletter-form button {
+        justify-self: start;
+        background: linear-gradient(135deg, rgba(212, 160, 23, 0.95), rgba(111, 139, 58, 0.95));
+        border: none;
+        border-radius: 14px;
+        padding: 0.85rem 1.5rem;
+        font-weight: 700;
+        cursor: pointer;
+        color: #10140b;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        box-shadow: 0 14px 30px rgba(212, 160, 23, 0.25);
+      }
+
+      .newsletter-form button:hover,
+      .newsletter-form button:focus-visible {
+        transform: translateY(-1px);
+        box-shadow: 0 16px 32px rgba(212, 160, 23, 0.35);
+        outline: none;
+      }
+
+      .newsletter-success {
+        color: var(--mustard-300);
+        font-weight: 600;
+      }
+
+      .newsletter-error {
+        color: #f7b7a3;
+        font-weight: 600;
+      }
+
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        border: 0;
+      }
+
+      @media (max-width: 720px) {
+        body {
+          padding: 2rem 1rem 3rem;
+        }
+
+        .content {
+          padding: 2rem;
+        }
+
+        .chat-controls {
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        .chat-controls button {
+          width: 100%;
+        }
+
+        .menu {
+          left: 1.5rem;
+          right: 1.5rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app-shell">
+      <nav class="top-bar" aria-label="Birincil">
+        <a class="brand" href="#anasayfa">
+          <span class="brand-art" aria-hidden="true">
+            <svg viewBox="0 0 120 120" role="img" aria-hidden="true">
+              <defs>
+                <linearGradient id="hairGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#111810" />
+                  <stop offset="100%" stop-color="#1f2a1b" />
+                </linearGradient>
+                <linearGradient id="dressGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#d6b253" />
+                  <stop offset="100%" stop-color="#dca936" />
+                </linearGradient>
+              </defs>
+              <circle cx="60" cy="60" r="56" fill="#283118" stroke="#d4a017" stroke-width="3" />
+              <path
+                d="M38 92c12-4 20-4 44 0l-6-28H44z"
+                fill="url(#dressGradient)"
+                stroke="#f0d98a"
+                stroke-width="2"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M60 74c-10 0-20-10-20-24s10-24 20-24 20 10 20 24-10 24-20 24z"
+                fill="#f8e7c7"
+              />
+              <path d="M40 36c6-6 16-10 20-10s14 2 20 10" fill="url(#hairGradient)" />
+              <path
+                d="M60 74c-10 0-18-10-18-20V38c4-4 11-6 18-6s14 2 18 6v16c0 10-8 20-18 20z"
+                fill="#f8e7c7"
+              />
+              <path d="M42 44c4 4 10 6 18 6s14-2 18-6" stroke="#111" stroke-width="3" stroke-linecap="round" />
+              <circle cx="50" cy="52" r="3" fill="#111" />
+              <circle cx="70" cy="52" r="3" fill="#111" />
+              <path d="M52 64c2 2 6 3 8 3s6-1 8-3" stroke="#111" stroke-width="2" stroke-linecap="round" />
+              <path d="M48 82c4 4 12 6 12 6s8-2 12-6" stroke="#d4a017" stroke-width="2" stroke-linecap="round" />
+              <path d="M30 84c10 12 24 18 30 18s20-6 30-18" stroke="#6f8b3a" stroke-width="4" stroke-linecap="round" />
+            </svg>
+          </span>
+          <span class="brand-name">POCAHONTAS</span>
+        </a>
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-menu">
+          Menü
+          <span class="toggle-icon" aria-hidden="true"></span>
+        </button>
+        <ul id="primary-menu" class="menu" hidden>
+          <li><a href="#anasayfa">Anasayfa</a></li>
+          <li><a href="#hikaye">Hikâye</a></li>
+          <li><a href="#karakterler">Karakterler</a></li>
+          <li><a href="#galeri">Galeri</a></li>
+          <li><a href="#sohbet">Sohbet</a></li>
+          <li><a href="#iletisim">İletişim</a></li>
+        </ul>
+      </nav>
+
+      <main class="content" id="anasayfa">
+        <header class="intro">
+          <h1>POCAHONTAS</h1>
+          <p>
+            Efsanevi kahramanın dünyasına hoş geldiniz. Koyu tonlu bu deneyimde, Pocahontas'ın doğayla iç içe hikâyesini keşfederken
+            yapay zekâ destekli sohbet kutusuyla merak ettiklerinizi sorabilirsiniz.
+          </p>
+        </header>
+
+        <section class="card chat" aria-labelledby="chat-title" id="sohbet">
+          <div class="card-header">
+            <h2 id="chat-title">LLM Sohbet Kutusu</h2>
+            <p>Merak ettiklerinizi sorun, yapay zekâdan hızlı ve sıcak bir yanıt alın.</p>
+          </div>
+          <div class="chat-controls">
+            <label class="sr-only" for="msg">Mesajınız</label>
+            <input type="text" id="msg" name="msg" placeholder="Mesajınızı yazın" autocomplete="off" />
+            <button id="send">Gönder</button>
+          </div>
+          <div id="log" aria-live="polite" role="log"></div>
+        </section>
+
+        <section class="card" aria-labelledby="newsletter-title" id="iletisim">
+          <div class="card-header">
+            <h2 id="newsletter-title">Bültene Katılın</h2>
+            <p>Yeni hikâyeler, sanat eserleri ve etkinliklerden ilk siz haberdar olun.</p>
+          </div>
+          <form class="newsletter-form" id="newsletter-form" novalidate>
+            <label for="email">E-posta adresiniz</label>
+            <input type="email" id="email" name="email" placeholder="ornek@pocahontas.com" autocomplete="email" required />
+            <button type="submit">Katıl</button>
+            <p id="newsletter-feedback" role="status" aria-live="polite"></p>
+          </form>
+        </section>
+      </main>
     </div>
-  </main>
 
-  <script>
-    document.getElementById('helloBtn').addEventListener('click', () => {
-      document.getElementById('out').textContent = "Butona tıkladın! 🎉";
-    });
-// Bülten formu için davranış
-document.getElementById('subscribeBtn').addEventListener('click', () => {
-  const email = document.getElementById('email').value.trim();
-  if (email === "") {
-    alert("Lütfen e-posta adresinizi girin!");
-  } else {
-    document.getElementById('thanks').textContent = "Teşekkürler!";
-    document.getElementById('email').value = ""; // kutuyu temizle
-  }
-});
+    <script>
+      const menuToggle = document.querySelector('.menu-toggle');
+      const primaryMenu = document.querySelector('#primary-menu');
 
-  </script>
-</body>
+      if (menuToggle && primaryMenu) {
+        menuToggle.addEventListener('click', () => {
+          const expanded = menuToggle.getAttribute('aria-expanded') === 'true';
+          menuToggle.setAttribute('aria-expanded', String(!expanded));
+          primaryMenu.hidden = expanded;
+        });
+
+        document.addEventListener('click', (event) => {
+          if (
+            !primaryMenu.hidden &&
+            !primaryMenu.contains(event.target) &&
+            event.target !== menuToggle &&
+            !menuToggle.contains(event.target)
+          ) {
+            primaryMenu.hidden = true;
+            menuToggle.setAttribute('aria-expanded', 'false');
+          }
+        });
+      }
+
+      const messageInput = document.querySelector('#msg');
+      const sendBtn = document.querySelector('#send');
+      const logArea = document.querySelector('#log');
+
+      if (sendBtn && messageInput && logArea) {
+        sendBtn.addEventListener('click', handleSendMessage);
+        messageInput.addEventListener('keydown', (event) => {
+          if (event.key === 'Enter' && !event.shiftKey) {
+            event.preventDefault();
+            handleSendMessage();
+          }
+        });
+      }
+
+      async function handleSendMessage() {
+        const userMessage = (messageInput.value || '').trim();
+
+        if (!userMessage) {
+          alert('Lütfen bir mesaj yazın!');
+          messageInput.focus();
+          return;
+        }
+
+        appendLog('Siz', userMessage);
+        messageInput.value = '';
+        sendBtn.disabled = true;
+
+        try {
+          const response = await fetch('/api/chat', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ message: userMessage }),
+          });
+
+          if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            const errorMessage = errorData.error || 'Sunucu hatası veya API anahtarı eksik.';
+            appendLog('Sistem', errorMessage, true);
+            return;
+          }
+
+          const data = await response.json();
+          appendLog('Asistan', data.reply || 'Yanıt alınamadı.');
+        } catch (error) {
+          console.error('Sohbet isteği başarısız:', error);
+          appendLog('Sistem', 'Sunucu hatası veya API anahtarı eksik.', true);
+        } finally {
+          sendBtn.disabled = false;
+          messageInput.focus();
+        }
+      }
+
+      function appendLog(author, message, isError = false) {
+        const paragraph = document.createElement('p');
+        const prefix = document.createElement('strong');
+        prefix.textContent = `${author}: `;
+        paragraph.appendChild(prefix);
+        paragraph.append(message);
+
+        if (isError) {
+          paragraph.style.color = '#f7b7a3';
+        }
+
+        logArea.appendChild(paragraph);
+        logArea.scrollTop = logArea.scrollHeight;
+      }
+
+      const newsletterForm = document.querySelector('#newsletter-form');
+      const newsletterFeedback = document.querySelector('#newsletter-feedback');
+
+      if (newsletterForm && newsletterFeedback) {
+        newsletterForm.addEventListener('submit', (event) => {
+          event.preventDefault();
+          const emailInput = newsletterForm.querySelector('#email');
+          const email = (emailInput.value || '').trim();
+
+          if (!email) {
+            setNewsletterFeedback('Lütfen bir e-posta adresi girin.', true);
+            emailInput.focus();
+            return;
+          }
+
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          if (!emailRegex.test(email)) {
+            setNewsletterFeedback('Geçerli bir e-posta adresi girin.', true);
+            emailInput.focus();
+            return;
+          }
+
+          setNewsletterFeedback('Teşekkürler! Bültene başarıyla katıldınız.', false);
+          emailInput.value = '';
+          emailInput.focus();
+        });
+      }
+
+      function setNewsletterFeedback(message, isError) {
+        newsletterFeedback.textContent = message;
+        newsletterFeedback.className = isError ? 'newsletter-error' : 'newsletter-success';
+      }
+    </script>
+  </body>
 </html>
