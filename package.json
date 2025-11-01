@@ -1,0 +1,9 @@
+{
+  "name": "ilk-site",
+  "private": true,
+  "scripts": {
+    "start": "npm --prefix fullstack-newsletter-llm start",
+    "dev": "npm --prefix fullstack-newsletter-llm start",
+    "install:fullstack": "npm install --prefix fullstack-newsletter-llm"
+  }
+}
