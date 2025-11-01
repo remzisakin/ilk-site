@@ -2,7 +2,8 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import fetch from 'node-fetch';
-import { appendFile, access, constants as fsConstants } from 'fs/promises';
+import https from 'https';
+import { appendFile, access, constants as fsConstants, readFile } from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -20,6 +21,24 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const PORT = process.env.PORT || 3000;
 const subscribersFilePath = path.join(__dirname, 'data', 'subscribers.csv');
+
+const OPENAI_CA_CERT_PATH = process.env.OPENAI_CA_CERT_PATH;
+const OPENAI_SKIP_TLS_VERIFY = process.env.OPENAI_SKIP_TLS_VERIFY === '1';
+
+let openAiHttpsAgent;
+
+if (OPENAI_SKIP_TLS_VERIFY) {
+  openAiHttpsAgent = new https.Agent({ rejectUnauthorized: false });
+  console.warn('Uyarı: OPENAI_SKIP_TLS_VERIFY=1 ayarlandı. TLS sertifika doğrulaması devre dışı.');
+} else if (OPENAI_CA_CERT_PATH) {
+  try {
+    const customCa = await readFile(OPENAI_CA_CERT_PATH, 'utf8');
+    openAiHttpsAgent = new https.Agent({ ca: customCa });
+    console.log('OpenAI API isteği için özel CA sertifikası yüklendi.');
+  } catch (error) {
+    console.error('Özel CA sertifikası yüklenemedi:', error);
+  }
+}
 
 app.use(cors());
 app.use(express.json());
@@ -77,7 +96,7 @@ app.post('/api/chat', async (req, res) => {
   }
 
   try {
-    const response = await fetch('https://api.openai.com/v1/responses', {
+    const fetchOptions = {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${OPENAI_API_KEY}`,
@@ -87,7 +106,13 @@ app.post('/api/chat', async (req, res) => {
         model: 'gpt-4o-mini',
         input: `Kullanıcı dedi ki: "${message}". Kısa, anlaşılır ve Türkçe cevap ver.`,
       }),
-    });
+    };
+
+    if (openAiHttpsAgent) {
+      fetchOptions.agent = openAiHttpsAgent;
+    }
+
+    const response = await fetch('https://api.openai.com/v1/responses', fetchOptions);
 
     if (!response.ok) {
       console.error('OpenAI API hatası:', response.status, await response.text());
