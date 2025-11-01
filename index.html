@@ -235,6 +235,154 @@
         box-shadow: 0 18px 44px rgba(0, 0, 0, 0.3);
       }
 
+      .world-map {
+        gap: 2rem;
+      }
+
+      .map-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+        gap: 2rem;
+        align-items: start;
+      }
+
+      .map-figure {
+        margin: 0;
+        display: grid;
+        gap: 1rem;
+        padding: 1.25rem;
+        border-radius: 18px;
+        border: 1px solid rgba(212, 160, 23, 0.16);
+        background: linear-gradient(160deg, rgba(22, 29, 15, 0.9), rgba(63, 74, 35, 0.25));
+        box-shadow: inset 0 0 0 1px rgba(111, 139, 58, 0.18);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .map-figure::after {
+        content: '';
+        position: absolute;
+        inset: 12% 18%;
+        border-radius: 40% 45% 50% 55%;
+        background: radial-gradient(circle at top left, rgba(240, 217, 138, 0.18), transparent 60%);
+        pointer-events: none;
+        mix-blend-mode: screen;
+      }
+
+      .map-figure svg {
+        width: 100%;
+        height: auto;
+        display: block;
+        border-radius: 14px;
+        background: radial-gradient(circle at 30% 30%, rgba(63, 74, 35, 0.7), rgba(16, 20, 11, 0.95));
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+      }
+
+      .map-figure figcaption {
+        margin: 0;
+        color: rgba(245, 240, 217, 0.75);
+      }
+
+      .map-legend {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: grid;
+        gap: 1rem;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      }
+
+      .map-legend li {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 1rem;
+        align-items: start;
+        padding: 1rem 1.25rem;
+        border-radius: 16px;
+        border: 1px solid rgba(212, 160, 23, 0.15);
+        background: rgba(22, 30, 18, 0.7);
+        box-shadow: inset 0 0 0 1px rgba(63, 74, 35, 0.22);
+      }
+
+      .legend-marker {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: radial-gradient(circle at 30% 30%, rgba(240, 217, 138, 0.85), rgba(212, 160, 23, 0.65));
+        box-shadow: 0 0 0 2px rgba(212, 160, 23, 0.35);
+        position: relative;
+      }
+
+      .legend-marker::after {
+        content: '';
+        position: absolute;
+        inset: -6px;
+        border-radius: 50%;
+        border: 2px solid rgba(212, 160, 23, 0.25);
+        opacity: 0.8;
+      }
+
+      .map-legend h3 {
+        margin: 0;
+        font-size: 1.05rem;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--mustard-300);
+      }
+
+      .map-legend p {
+        margin: 0.5rem 0 0;
+        color: rgba(245, 240, 217, 0.72);
+        line-height: 1.5;
+      }
+
+      .map-figure .ocean {
+        fill: url(#oceanGradient);
+      }
+
+      .map-figure .land {
+        fill: url(#landGradient);
+        stroke: rgba(16, 20, 11, 0.65);
+        stroke-width: 2;
+      }
+
+      .map-figure .land-edge {
+        fill: none;
+        stroke: rgba(240, 217, 138, 0.28);
+        stroke-width: 2.5;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      .map-marker-core {
+        fill: rgba(240, 217, 138, 0.9);
+        stroke: rgba(16, 20, 11, 0.55);
+        stroke-width: 1.5;
+      }
+
+      .map-marker-ring {
+        fill: none;
+        stroke: rgba(212, 160, 23, 0.4);
+        stroke-width: 3;
+        transform-origin: center;
+        animation: pulse-ring 3s ease-in-out infinite;
+      }
+
+      @keyframes pulse-ring {
+        0% {
+          transform: scale(0.75);
+          opacity: 0.85;
+        }
+        70% {
+          transform: scale(1.4);
+          opacity: 0;
+        }
+        100% {
+          transform: scale(0.75);
+          opacity: 0;
+        }
+      }
+
       .story-content {
         display: grid;
         gap: 1rem;
@@ -443,6 +591,10 @@
           padding: 2rem;
         }
 
+        .map-grid {
+          grid-template-columns: 1fr;
+        }
+
         .chat-controls {
           flex-direction: column;
           align-items: stretch;
@@ -519,6 +671,7 @@
           <li><a href="#hikaye">Hikâye</a></li>
           <li><a href="#karakterler">Karakterler</a></li>
           <li><a href="#galeri">Galeri</a></li>
+          <li><a href="#harita">Dünya Haritası</a></li>
           <li><a href="#sohbet">Sohbet</a></li>
           <li><a href="#iletisim">İletişim</a></li>
         </ul>
@@ -597,6 +750,98 @@
               <div class="gallery-illustration" aria-hidden="true"></div>
               <figcaption>Grandmother Willow'un dalları arasında paylaşılan bilgece sırlar.</figcaption>
             </figure>
+          </div>
+        </section>
+
+        <section class="card world-map" aria-labelledby="map-title" id="harita">
+          <div class="card-header">
+            <h2 id="map-title">Dünya Haritası</h2>
+            <p>Pocahontas'ın doğa sevgisinden ilham alan toplulukların küresel dokunuşlarını keşfedin.</p>
+          </div>
+          <div class="map-grid">
+            <figure class="map-figure">
+              <svg viewBox="0 0 800 400" role="img" aria-labelledby="world-map-title world-map-desc">
+                <title id="world-map-title">Dünya haritası</title>
+                <desc id="world-map-desc">Koyu yeşil ve altın tonlarında stilize edilmiş kıtalar ve ilham noktaları.</desc>
+                <defs>
+                  <radialGradient id="oceanGradient" cx="50%" cy="45%" r="80%">
+                    <stop offset="0%" stop-color="#1f2615" />
+                    <stop offset="65%" stop-color="#161d0f" />
+                    <stop offset="100%" stop-color="#10140b" />
+                  </radialGradient>
+                  <linearGradient id="landGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#d4a017" stop-opacity="0.85" />
+                    <stop offset="50%" stop-color="#8b9b52" stop-opacity="0.85" />
+                    <stop offset="100%" stop-color="#4a5b2c" stop-opacity="0.95" />
+                  </linearGradient>
+                </defs>
+                <rect class="ocean" x="0" y="0" width="800" height="400" rx="24" />
+                <path
+                  class="land"
+                  d="M80 220C80 190 100 160 140 140C170 120 210 110 250 130C280 150 300 190 270 210C250 230 230 240 210 250C190 260 160 270 130 260C100 250 90 240 80 220Z"
+                />
+                <path
+                  class="land"
+                  d="M260 230C270 250 290 280 300 310C305 330 290 360 270 360C250 350 240 320 235 290C232 270 240 250 260 230Z"
+                />
+                <path
+                  class="land"
+                  d="M320 140C360 120 410 110 460 130C500 140 550 150 590 170C620 190 640 210 650 230C660 250 640 260 610 260C580 260 550 250 520 250C480 250 450 240 420 230C390 220 360 210 340 200C320 190 300 170 320 140Z"
+                />
+                <path
+                  class="land"
+                  d="M360 210C380 220 400 250 410 280C420 310 410 340 380 350C350 340 340 310 335 280C330 250 340 220 360 210Z"
+                />
+                <path
+                  class="land"
+                  d="M620 270C640 260 670 270 690 290C700 300 700 320 680 330C660 340 640 330 620 320C610 310 610 280 620 270Z"
+                />
+                <path class="land" d="M560 280C570 270 590 280 600 295C595 305 580 310 570 300Z" />
+                <path class="land" d="M220 80C240 70 260 80 260 100C240 105 230 100 220 90Z" />
+                <path class="land" d="M320 160C330 150 340 160 335 170C325 175 320 170 320 160Z" />
+                <path class="land-edge" d="M140 320C240 300 340 320 440 310" />
+                <path class="land-edge" d="M420 180C480 160 540 170 600 200" />
+                <path class="land-edge" d="M520 310C580 300 620 310 660 300" />
+                <g aria-hidden="true">
+                  <g>
+                    <circle class="map-marker-ring" cx="205" cy="205" r="16" />
+                    <circle class="map-marker-core" cx="205" cy="205" r="6" />
+                  </g>
+                  <g>
+                    <circle class="map-marker-ring" cx="380" cy="280" r="16" />
+                    <circle class="map-marker-core" cx="380" cy="280" r="6" />
+                  </g>
+                  <g>
+                    <circle class="map-marker-ring" cx="620" cy="220" r="16" />
+                    <circle class="map-marker-core" cx="620" cy="220" r="6" />
+                  </g>
+                </g>
+              </svg>
+              <figcaption>Harita, Pocahontas'ın ruhunu taşıyan ekolojik hikâyeleri dünyaya yayıyor.</figcaption>
+            </figure>
+            <ul class="map-legend">
+              <li>
+                <span class="legend-marker" aria-hidden="true"></span>
+                <div>
+                  <h3>Orman Fısıltıları</h3>
+                  <p>Kuzey ormanlarından gelen yerel hikâyeler, sürdürülebilir gelenekleri günümüze taşıyor.</p>
+                </div>
+              </li>
+              <li>
+                <span class="legend-marker" aria-hidden="true"></span>
+                <div>
+                  <h3>Nehir Rehberleri</h3>
+                  <p>Amazon ve Nil boyunca uzanan topluluklar, suyla kurulan bağın bilgisini paylaşıyor.</p>
+                </div>
+              </li>
+              <li>
+                <span class="legend-marker" aria-hidden="true"></span>
+                <div>
+                  <h3>Rüzgâr Yolcuları</h3>
+                  <p>Pasifik adalarındaki hikâye anlatıcıları, rüzgârın yön verdiği umut mesajlarını iletiyor.</p>
+                </div>
+              </li>
+            </ul>
           </div>
         </section>
 
