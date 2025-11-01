@@ -3,7 +3,12 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import fetch from 'node-fetch';
 import https from 'https';
-import { appendFile, access, constants as fsConstants, readFile } from 'fs/promises';
+import {
+  appendFile,
+  access,
+  constants as fsConstants,
+  readFile,
+} from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -53,6 +58,31 @@ async function ensureSubscribersFile() {
   }
 }
 
+async function isEmailAlreadySubscribed(email) {
+  try {
+    const fileContent = await readFile(subscribersFilePath, 'utf8');
+    return fileContent
+      .split('\n')
+      .slice(1)
+      .filter((line) => line.trim().length > 0)
+      .some((line) => {
+        const [storedEmail] = line.split(',');
+        const normalisedEmail = storedEmail
+          ?.replace(/^"|"$/g, '')
+          .replace(/""/g, '"')
+          .trim()
+          .toLowerCase();
+        return normalisedEmail === email.toLowerCase();
+      });
+  } catch (error) {
+    if (error.code === 'ENOENT') {
+      return false;
+    }
+
+    throw error;
+  }
+}
+
 // Sunucu başlarken abonelik dosyasının var olduğundan emin ol.
 ensureSubscribersFile().catch((error) => {
   console.error('Abonelik dosyası oluşturulamadı:', error);
@@ -70,6 +100,24 @@ app.post('/api/subscribe', async (req, res) => {
 
   if (!trimmedEmail || !emailRegex.test(trimmedEmail)) {
     return res.status(400).json({ error: 'Geçerli bir e-posta adresi girin.' });
+  }
+
+  try {
+    await ensureSubscribersFile();
+  } catch (error) {
+    console.error('Abonelik dosyası hazırlanamadı:', error);
+    return res.status(500).json({ error: 'Sunucu hatası' });
+  }
+
+  try {
+    const alreadySubscribed = await isEmailAlreadySubscribed(trimmedEmail);
+
+    if (alreadySubscribed) {
+      return res.status(409).json({ error: 'Bu e-posta adresi zaten kayıtlı.' });
+    }
+  } catch (error) {
+    console.error('Abonelik kayıtları okunamadı:', error);
+    return res.status(500).json({ error: 'Sunucu hatası' });
   }
 
   const now = new Date().toISOString();
