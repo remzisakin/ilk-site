@@ -3,51 +3,89 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Bülten ve Sohbet</title>
+    <title>POCAHONTAS</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <main class="container">
-      <header>
-        <h1>Hoş geldiniz! Bülten + LLM Sohbet Deneyimi</h1>
-        <p>Hem bültenimize katılın hem de yapay zekâ ile sohbet edin.</p>
-      </header>
+    <div class="app-shell">
+      <nav class="top-bar" aria-label="Birincil">
+        <a class="brand" href="#anasayfa">
+          <span class="brand-art" aria-hidden="true">
+            <svg viewBox="0 0 120 120" role="img" aria-hidden="true">
+              <defs>
+                <linearGradient id="hairGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#111810" />
+                  <stop offset="100%" stop-color="#1f2a1b" />
+                </linearGradient>
+                <linearGradient id="dressGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#d6b253" />
+                  <stop offset="100%" stop-color="#dca936" />
+                </linearGradient>
+              </defs>
+              <circle cx="60" cy="60" r="56" fill="#283118" stroke="#d4a017" stroke-width="3" />
+              <path
+                d="M38 92c12-4 20-4 44 0l-6-28H44z"
+                fill="url(#dressGradient)"
+                stroke="#f0d98a"
+                stroke-width="2"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M60 74c-10 0-20-10-20-24s10-24 20-24 20 10 20 24-10 24-20 24z"
+                fill="#f8e7c7"
+              />
+              <path d="M40 36c6-6 16-10 20-10s14 2 20 10" fill="url(#hairGradient)" />
+              <path
+                d="M60 74c-10 0-18-10-18-20V38c4-4 11-6 18-6s14 2 18 6v16c0 10-8 20-18 20z"
+                fill="#f8e7c7"
+              />
+              <path d="M42 44c4 4 10 6 18 6s14-2 18-6" stroke="#111" stroke-width="3" stroke-linecap="round" />
+              <circle cx="50" cy="52" r="3" fill="#111" />
+              <circle cx="70" cy="52" r="3" fill="#111" />
+              <path d="M52 64c2 2 6 3 8 3s6-1 8-3" stroke="#111" stroke-width="2" stroke-linecap="round" />
+              <path d="M48 82c4 4 12 6 12 6s8-2 12-6" stroke="#d4a017" stroke-width="2" stroke-linecap="round" />
+              <path d="M30 84c10 12 24 18 30 18s20-6 30-18" stroke="#6f8b3a" stroke-width="4" stroke-linecap="round" />
+            </svg>
+          </span>
+          <span class="brand-name">POCAHONTAS</span>
+        </a>
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-menu">
+          Menü
+          <span class="toggle-icon" aria-hidden="true"></span>
+        </button>
+        <ul id="primary-menu" class="menu" hidden>
+          <li><a href="#anasayfa">Anasayfa</a></li>
+          <li><a href="#hikaye">Hikâye</a></li>
+          <li><a href="#karakterler">Karakterler</a></li>
+          <li><a href="#galeri">Galeri</a></li>
+          <li><a href="#sohbet">Sohbet</a></li>
+          <li><a href="#iletisim">İletişim</a></li>
+        </ul>
+      </nav>
 
-      <section class="card" aria-labelledby="newsletter-title">
-        <h2 id="newsletter-title">Bültenimize Katılın</h2>
-        <p>Bültenimize kaydolmak için e-posta adresinizi girmeniz yeterli.</p>
-        <form id="newsletterForm" novalidate>
-          <label for="email">E-posta</label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            placeholder="E-posta adresiniz"
-            required
-            autocomplete="email"
-          />
-          <button type="submit" id="subscribeBtn">Gönder</button>
-        </form>
-        <p id="thanks" aria-live="polite" class="feedback" role="status"></p>
-      </section>
+      <main class="content" id="anasayfa">
+        <header class="intro">
+          <h1>POCAHONTAS</h1>
+          <p>
+            Efsanevi kahramanın dünyasına hoş geldiniz. Koyu tonlu bu deneyimde, Pocahontas'ın doğayla iç içe
+            hikâyesini keşfederken yapay zekâ destekli sohbet kutusuyla merak ettiklerinizi sorabilirsiniz.
+          </p>
+        </header>
 
-      <section class="card" aria-labelledby="chat-title">
-        <h2 id="chat-title">LLM Sohbet Kutusu</h2>
-        <p>Merak ettiklerinizi sorun, yapay zekâdan kısa ve net bir yanıt alın.</p>
-        <div class="chat-controls">
-          <label class="sr-only" for="msg">Mesajınız</label>
-          <input
-            type="text"
-            id="msg"
-            name="msg"
-            placeholder="Mesajınızı yazın"
-            autocomplete="off"
-          />
-          <button id="send">Gönder</button>
-        </div>
-        <div id="log" aria-live="polite" role="log"></div>
-      </section>
-    </main>
+        <section class="card chat" aria-labelledby="chat-title" id="sohbet">
+          <div class="card-header">
+            <h2 id="chat-title">LLM Sohbet Kutusu</h2>
+            <p>Merak ettiklerinizi sorun, yapay zekâdan hızlı ve sıcak bir yanıt alın.</p>
+          </div>
+          <div class="chat-controls">
+            <label class="sr-only" for="msg">Mesajınız</label>
+            <input type="text" id="msg" name="msg" placeholder="Mesajınızı yazın" autocomplete="off" />
+            <button id="send">Gönder</button>
+          </div>
+          <div id="log" aria-live="polite" role="log"></div>
+        </section>
+      </main>
+    </div>
 
     <script src="app.js" defer></script>
   </body>

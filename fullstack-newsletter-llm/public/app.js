@@ -1,60 +1,36 @@
-const emailInput = document.querySelector('#email');
-const subscribeBtn = document.querySelector('#subscribeBtn');
-const thanksMessage = document.querySelector('#thanks');
-const newsletterForm = document.querySelector('#newsletterForm');
+const menuToggle = document.querySelector('.menu-toggle');
+const primaryMenu = document.querySelector('#primary-menu');
+
+if (menuToggle && primaryMenu) {
+  menuToggle.addEventListener('click', () => {
+    const expanded = menuToggle.getAttribute('aria-expanded') === 'true';
+    menuToggle.setAttribute('aria-expanded', String(!expanded));
+    primaryMenu.hidden = expanded;
+  });
+
+  document.addEventListener('click', (event) => {
+    if (!primaryMenu.hidden && !primaryMenu.contains(event.target) && event.target !== menuToggle && !menuToggle.contains(event.target)) {
+      primaryMenu.hidden = true;
+      menuToggle.setAttribute('aria-expanded', 'false');
+    }
+  });
+}
 
 const messageInput = document.querySelector('#msg');
 const sendBtn = document.querySelector('#send');
 const logArea = document.querySelector('#log');
 
-newsletterForm.addEventListener('submit', async (event) => {
-  event.preventDefault();
-
-  const email = (emailInput.value || '').trim();
-
-  if (!email) {
-    alert('Lütfen e-posta adresinizi girin!');
-    emailInput.focus();
-    return;
-  }
-
-  subscribeBtn.disabled = true;
-
-  try {
-    const response = await fetch('/api/subscribe', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ email }),
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      const errorMessage = errorData.error || 'Sunucu hatası veya ağ sorunu.';
-      thanksMessage.textContent = errorMessage;
-      thanksMessage.style.color = '#b91c1c';
-      return;
+if (sendBtn && messageInput && logArea) {
+  sendBtn.addEventListener('click', handleSendMessage);
+  messageInput.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault();
+      handleSendMessage();
     }
+  });
+}
 
-    const result = await response.json();
-    thanksMessage.textContent = result.message || 'Teşekkürler!';
-    thanksMessage.style.color = '#047857';
-    emailInput.value = '';
-
-    // setTimeout(() => {
-    //   thanksMessage.textContent = '';
-    // }, 3000);
-  } catch (error) {
-    console.error('Bülten isteği başarısız:', error);
-    thanksMessage.textContent = 'Sunucu hatası veya bağlantı sorunu.';
-    thanksMessage.style.color = '#b91c1c';
-  } finally {
-    subscribeBtn.disabled = false;
-  }
-});
-
-sendBtn.addEventListener('click', async () => {
+async function handleSendMessage() {
   const userMessage = (messageInput.value || '').trim();
 
   if (!userMessage) {
@@ -92,7 +68,7 @@ sendBtn.addEventListener('click', async () => {
     sendBtn.disabled = false;
     messageInput.focus();
   }
-});
+}
 
 function appendLog(author, message, isError = false) {
   const paragraph = document.createElement('p');
@@ -102,7 +78,7 @@ function appendLog(author, message, isError = false) {
   paragraph.append(message);
 
   if (isError) {
-    paragraph.style.color = '#b91c1c';
+    paragraph.style.color = '#f7b7a3';
   }
 
   logArea.appendChild(paragraph);
