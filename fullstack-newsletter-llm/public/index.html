@@ -59,6 +59,7 @@
           <li><a href="#karakterler">Karakterler</a></li>
           <li><a href="#galeri">Galeri</a></li>
           <li><a href="#sohbet">Sohbet</a></li>
+          <li><a href="#harita">Harita</a></li>
           <li><a href="#iletisim">İletişim</a></li>
         </ul>
       </nav>
@@ -150,6 +151,110 @@
             <button id="send">Gönder</button>
           </div>
           <div id="log" aria-live="polite" role="log"></div>
+        </section>
+
+        <section class="card world-map" aria-labelledby="map-title" id="harita">
+          <div class="card-header">
+            <h2 id="map-title">Dünya Haritası</h2>
+            <p>Pocahontas'ın doğaya duyduğu sevginin ilham verdiği toplulukların küresel izini keşfedin.</p>
+          </div>
+          <div class="map-grid">
+            <figure class="map-figure">
+              <svg viewBox="0 0 800 400" role="img" aria-labelledby="world-map-title world-map-desc">
+                <title id="world-map-title">Dünya haritası</title>
+                <desc id="world-map-desc">Koyu yeşil ve altın tonlarında stilize edilmiş kıtalar ve ilham noktaları.</desc>
+                <defs>
+                  <radialGradient id="oceanGradient" cx="50%" cy="45%" r="82%">
+                    <stop offset="0%" stop-color="#1f2615" stop-opacity="0.95" />
+                    <stop offset="60%" stop-color="#161d0f" stop-opacity="0.9" />
+                    <stop offset="100%" stop-color="#10140b" stop-opacity="1" />
+                  </radialGradient>
+                  <radialGradient id="oceanSheen" cx="30%" cy="25%" r="85%">
+                    <stop offset="0%" stop-color="#f0d98a" stop-opacity="0.32" />
+                    <stop offset="45%" stop-color="#d4a017" stop-opacity="0.12" />
+                    <stop offset="100%" stop-color="#10140b" stop-opacity="0" />
+                  </radialGradient>
+                  <linearGradient id="landGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#d4a017" stop-opacity="0.9" />
+                    <stop offset="45%" stop-color="#9aa962" stop-opacity="0.88" />
+                    <stop offset="100%" stop-color="#3c4b27" stop-opacity="0.95" />
+                  </linearGradient>
+                  <radialGradient id="auroraGlow" cx="50%" cy="50%" r="60%">
+                    <stop offset="0%" stop-color="#f0d98a" stop-opacity="0.35" />
+                    <stop offset="55%" stop-color="#6f8b3a" stop-opacity="0.18" />
+                    <stop offset="100%" stop-color="#10140b" stop-opacity="0" />
+                  </radialGradient>
+                  <clipPath id="worldClip">
+                    <rect x="0" y="0" width="800" height="400" rx="24" />
+                  </clipPath>
+                </defs>
+                <g clip-path="url(#worldClip)">
+                  <rect class="ocean" x="0" y="0" width="800" height="400" rx="24" />
+                  <rect class="ocean-sheen" x="0" y="0" width="800" height="400" rx="24" />
+                  <g class="map-gridlines">
+                    <line class="map-gridline lat" x1="0" y1="66.67" x2="800" y2="66.67" />
+                    <line class="map-gridline lat" x1="0" y1="133.33" x2="800" y2="133.33" />
+                    <line class="map-gridline lat" x1="0" y1="200" x2="800" y2="200" />
+                    <line class="map-gridline lat" x1="0" y1="266.67" x2="800" y2="266.67" />
+                    <line class="map-gridline lat" x1="0" y1="333.33" x2="800" y2="333.33" />
+                    <line class="map-gridline lon" x1="133.33" y1="0" x2="133.33" y2="400" />
+                    <line class="map-gridline lon" x1="266.67" y1="0" x2="266.67" y2="400" />
+                    <line class="map-gridline lon" x1="400" y1="0" x2="400" y2="400" />
+                    <line class="map-gridline lon" x1="533.33" y1="0" x2="533.33" y2="400" />
+                    <line class="map-gridline lon" x1="666.67" y1="0" x2="666.67" y2="400" />
+                  </g>
+                  <g class="map-glow">
+                    <circle cx="180" cy="160" r="220" />
+                    <circle cx="620" cy="240" r="200" />
+                  </g>
+                  <path
+                    id="world-land"
+                    class="land"
+                    d="M536.02 120.78L542.18 119.98L546.1 116.31L550.73 117.46L554.18 120.61L555.28 125.51L553.82 129.59L553.82 134.5L558.28 139.42L562.55 143.3L566.64 145.83L570.71 149.52L576.36 155.97L579.27 161.41L584.92 167.31L592.56 173.76L600.2 182.43L606.93 188.49L612.2 196.15L617.29 203.1L622.74 210.22L627.85 215.85L632.75 220.74L641.85 227.85L648.96 232.02L655.52 235.31L661.2 240.39L665.84 245.47L666.75 250.74L666.75 257.1L663.46 259.27L657.63 260.9L650.16 258.91L641.3 257.65L633.17 253.01L624.6 247.19L617.49 242.91L609.18 236.11L601.9 229.66L596.8 226.76L592.18 222.11L587.08 218.63L579.59 214.57L573.75 213.62L564.51 209.33L557.42 204.14L548.57 195.66L539.71 188.76L533.12 181.88L526.25 175.01L520.41 170.13L513.33 166.67L505.44 161.58L499.6 157.89L495.54 153.01L488.65 147.69L481.56 143.41L476.47 138.13L472.6 132.53L470.08 126.68L471.42 121.22L477.08 119.07L483.11 119.07L489.33 118.36L495.35 118.36L500.64 119.5L505.35 121.42L510.06 122.45L515.23 121.52L520.51 120.6L526.07 119.78L531.53 120.31L536.02 120.78ZM463.01 236.39L468.09 236.2L473.47 236.39L479.22 239.3L486.49 240.24L493.57 243.06L499.03 244.97L505.26 247.61L508.16 252.5L505.26 255.78L499.03 255.97L493.38 255.78L486.49 254.45L480.08 252.33L474.05 249.42L469.15 246.32L465.09 241.99L463.01 236.39ZM711.23 237.54L717.84 235.52L724.26 236.39L731.17 238.13L736.64 241.04L741.72 244.7L741.53 248.39L737.08 251.3L730.94 251.86L724.07 251.3L717.84 249.37L713.22 245.52L711.23 237.54Z"
+                  />
+                  <use href="#world-land" class="land-outline" />
+                  <g class="map-marker-layer" aria-hidden="true">
+                    <g>
+                      <circle class="map-marker-ring" cx="228.9" cy="115.6" r="18" />
+                      <circle class="map-marker-core" cx="228.9" cy="115.6" r="6.2" />
+                    </g>
+                    <g>
+                      <circle class="map-marker-ring" cx="266.7" cy="206.7" r="18" />
+                      <circle class="map-marker-core" cx="266.7" cy="206.7" r="6.2" />
+                    </g>
+                    <g>
+                      <circle class="map-marker-ring" cx="733.3" cy="222.2" r="18" />
+                      <circle class="map-marker-core" cx="733.3" cy="222.2" r="6.2" />
+                    </g>
+                  </g>
+                </g>
+              </svg>
+              <figcaption>Harita, Pocahontas'ın ruhunu taşıyan ekolojik hikâyeleri dünyaya yayıyor.</figcaption>
+            </figure>
+            <ul class="map-legend">
+              <li>
+                <span class="legend-marker" aria-hidden="true"></span>
+                <div>
+                  <h3>Orman Fısıltıları</h3>
+                  <p>Kuzey ormanlarından gelen yerel hikâyeler, sürdürülebilir gelenekleri günümüze taşıyor.</p>
+                </div>
+              </li>
+              <li>
+                <span class="legend-marker" aria-hidden="true"></span>
+                <div>
+                  <h3>Nehir Rehberleri</h3>
+                  <p>Amazon ve Nil boyunca uzanan topluluklar, suyla kurulan bağın bilgisini paylaşıyor.</p>
+                </div>
+              </li>
+              <li>
+                <span class="legend-marker" aria-hidden="true"></span>
+                <div>
+                  <h3>Rüzgâr Yolcuları</h3>
+                  <p>Pasifik adalarındaki hikâye anlatıcıları, rüzgârın yön verdiği umut mesajlarını iletiyor.</p>
+                </div>
+              </li>
+            </ul>
+          </div>
         </section>
       </main>
     </div>
