@@ -17,6 +17,8 @@ cp .env.example .env
 ```
 
 ## Çalıştırma
+> **Not:** Komutların çalışması için sisteminizde [Node.js](https://nodejs.org/) ve beraberinde gelen `npm` aracının kurulu olması gerekir. Windows kullanıyorsanız Node.js'i yükledikten sonra yeni bir terminal açtığınızdan emin olun.
+
 ```bash
 npm install
 npm start
