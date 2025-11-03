@@ -27,6 +27,7 @@
           <li><a href="#hikaye">Hikâye</a></li>
           <li><a href="#karakterler">Karakterler</a></li>
           <li><a href="#galeri">Galeri</a></li>
+          <li><a href="#kayitlar">Kayıtlar</a></li>
           <li><a href="#sohbet">Sohbet</a></li>
           <li><a href="#harita">Harita</a></li>
           <li><a href="#iletisim">İletişim</a></li>
@@ -107,6 +108,55 @@
               <figcaption>Grandmother Willow'un dalları arasında paylaşılan bilgece sırlar.</figcaption>
             </figure>
           </div>
+        </section>
+
+        <section class="card record-manager" aria-labelledby="records-title" id="kayitlar">
+          <div class="card-header">
+            <h2 id="records-title">Kayıt Yönetimi</h2>
+            <p>Yeni bir kayıt ekleyin veya var olan bir kaydı seçip tutarı güncelleyin. Kaydedilen tutarlar aynı biçimde korunur.</p>
+          </div>
+
+          <div class="record-toolbar">
+            <button type="button" id="new-record-button">Yeni Kayıt</button>
+            <label class="sr-only" for="record-select">Kayıt seçin</label>
+            <select id="record-select" aria-label="Kayıt seçin" disabled>
+              <option value="" disabled selected>Kayıt bulunmuyor</option>
+            </select>
+          </div>
+
+          <form id="record-form" class="record-form" autocomplete="off" novalidate>
+            <div class="field-group">
+              <label for="record-name">Kayıt Adı</label>
+              <input type="text" id="record-name" name="name" placeholder="Örn. Yeni kayıt" disabled />
+            </div>
+
+            <div class="field-group">
+              <label for="record-amount">Tutar</label>
+              <div class="amount-input-wrapper">
+                <input
+                  type="text"
+                  id="record-amount"
+                  name="amount"
+                  inputmode="decimal"
+                  placeholder="0.00"
+                  aria-describedby="record-amount-hint"
+                  disabled
+                  required
+                />
+                <span class="currency-suffix" aria-hidden="true">€</span>
+              </div>
+              <p id="record-amount-hint" class="field-hint">Tutar, girdiğiniz hâliyle saklanır ve görüntülenir.</p>
+            </div>
+
+            <div class="record-actions">
+              <button type="submit" id="save-record" disabled>Kaydet</button>
+              <button type="button" id="cancel-record" disabled>Vazgeç</button>
+            </div>
+          </form>
+
+          <ul class="record-list" id="record-list" aria-live="polite">
+            <li class="record-list-empty">Henüz kayıt yok.</li>
+          </ul>
         </section>
 
         <section class="card chat" aria-labelledby="chat-title" id="sohbet">

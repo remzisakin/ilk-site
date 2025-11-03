@@ -116,3 +116,237 @@ function appendLog(author, message, isError = false) {
   logArea.appendChild(paragraph);
   logArea.scrollTop = logArea.scrollHeight;
 }
+
+const recordForm = document.querySelector('#record-form');
+const recordNameInput = document.querySelector('#record-name');
+const recordAmountInput = document.querySelector('#record-amount');
+const saveRecordButton = document.querySelector('#save-record');
+const cancelRecordButton = document.querySelector('#cancel-record');
+const newRecordButton = document.querySelector('#new-record-button');
+const recordSelect = document.querySelector('#record-select');
+const recordList = document.querySelector('#record-list');
+
+if (
+  recordForm &&
+  recordNameInput &&
+  recordAmountInput &&
+  saveRecordButton &&
+  cancelRecordButton &&
+  newRecordButton &&
+  recordSelect &&
+  recordList
+) {
+  let records = [];
+  let currentRecordId = null;
+  let recordCounter = 0;
+
+  const setFormEnabled = (enabled) => {
+    [recordNameInput, recordAmountInput, saveRecordButton, cancelRecordButton].forEach((element) => {
+      element.disabled = !enabled;
+    });
+
+    recordForm.classList.toggle('is-editing', enabled);
+
+    if (!enabled) {
+      recordForm.reset();
+      saveRecordButton.textContent = 'Kaydet';
+    }
+  };
+
+  const formatAmount = (amountRaw) => {
+    if (typeof amountRaw !== 'string') {
+      return '';
+    }
+
+    const trimmed = amountRaw.trim();
+
+    if (!trimmed) {
+      return '';
+    }
+
+    return trimmed.includes('€') ? trimmed : `${trimmed} €`;
+  };
+
+  const renderRecordSelect = () => {
+    recordSelect.innerHTML = '';
+
+    const placeholder = document.createElement('option');
+    placeholder.value = '';
+    placeholder.textContent = records.length ? 'Bir kayıt seçin…' : 'Kayıt bulunmuyor';
+    placeholder.disabled = true;
+    placeholder.selected = !currentRecordId;
+    recordSelect.appendChild(placeholder);
+
+    records.forEach((record) => {
+      const option = document.createElement('option');
+      option.value = record.id;
+      const displayName = record.name ? record.name : 'Adsız kayıt';
+      option.textContent = `${displayName} — ${formatAmount(record.amount)}`;
+      if (record.id === currentRecordId) {
+        option.selected = true;
+        placeholder.selected = false;
+      }
+      recordSelect.appendChild(option);
+    });
+
+    recordSelect.disabled = records.length === 0;
+  };
+
+  const renderRecordList = () => {
+    recordList.innerHTML = '';
+
+    if (!records.length) {
+      const emptyItem = document.createElement('li');
+      emptyItem.className = 'record-list-empty';
+      emptyItem.textContent = 'Henüz kayıt yok.';
+      recordList.appendChild(emptyItem);
+      return;
+    }
+
+    records.forEach((record) => {
+      const item = document.createElement('li');
+      item.className = 'record-list-item';
+      if (record.id === currentRecordId) {
+        item.classList.add('is-selected');
+      }
+      item.dataset.recordId = record.id;
+      item.tabIndex = 0;
+      item.setAttribute('role', 'button');
+      item.setAttribute('aria-pressed', record.id === currentRecordId ? 'true' : 'false');
+
+      const name = document.createElement('span');
+      name.className = 'record-list-name';
+      name.textContent = record.name ? record.name : 'Adsız kayıt';
+
+      const amount = document.createElement('span');
+      amount.className = 'record-list-amount';
+      amount.textContent = formatAmount(record.amount);
+
+      item.append(name, amount);
+      recordList.appendChild(item);
+    });
+  };
+
+  const renderRecords = () => {
+    renderRecordSelect();
+    renderRecordList();
+  };
+
+  const findRecord = (id) => records.find((record) => record.id === id);
+
+  const activateRecord = (id) => {
+    const record = findRecord(id);
+
+    if (!record) {
+      return;
+    }
+
+    currentRecordId = record.id;
+    recordNameInput.value = record.name ?? '';
+    recordAmountInput.value = record.amount ?? '';
+    setFormEnabled(true);
+    saveRecordButton.textContent = 'Güncelle';
+    renderRecordList();
+  };
+
+  newRecordButton.addEventListener('click', () => {
+    currentRecordId = null;
+    setFormEnabled(true);
+    saveRecordButton.textContent = 'Kaydet';
+    recordForm.reset();
+    recordSelect.value = '';
+    renderRecords();
+    recordNameInput.focus();
+  });
+
+  recordSelect.addEventListener('change', (event) => {
+    const selectedId = event.target.value;
+    if (!selectedId) {
+      return;
+    }
+
+    activateRecord(selectedId);
+  });
+
+  recordList.addEventListener('click', (event) => {
+    const item = event.target.closest('li[data-record-id]');
+    if (!item) {
+      return;
+    }
+
+    const { recordId } = item.dataset;
+    if (!recordId) {
+      return;
+    }
+
+    recordSelect.value = recordId;
+    activateRecord(recordId);
+  });
+
+  recordList.addEventListener('keydown', (event) => {
+    if (event.key !== 'Enter' && event.key !== ' ') {
+      return;
+    }
+
+    const item = event.target.closest('li[data-record-id]');
+    if (!item) {
+      return;
+    }
+
+    event.preventDefault();
+    const { recordId } = item.dataset;
+    if (!recordId) {
+      return;
+    }
+
+    recordSelect.value = recordId;
+    activateRecord(recordId);
+  });
+
+  recordForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    if (!recordForm.reportValidity()) {
+      return;
+    }
+
+    const name = recordNameInput.value.trim();
+    const amountRaw = recordAmountInput.value;
+
+    if (!amountRaw.trim()) {
+      recordAmountInput.focus();
+      return;
+    }
+
+    if (currentRecordId) {
+      const existing = findRecord(currentRecordId);
+      if (existing) {
+        existing.name = name;
+        existing.amount = amountRaw;
+      }
+    } else {
+      recordCounter += 1;
+      const newRecord = {
+        id: String(recordCounter),
+        name,
+        amount: amountRaw,
+      };
+      records = [...records, newRecord];
+    }
+
+    currentRecordId = null;
+    renderRecords();
+    recordSelect.value = '';
+    setFormEnabled(false);
+  });
+
+  cancelRecordButton.addEventListener('click', () => {
+    recordSelect.value = '';
+    currentRecordId = null;
+    setFormEnabled(false);
+    renderRecords();
+  });
+
+  renderRecords();
+  setFormEnabled(false);
+}

@@ -472,6 +472,163 @@ body {
   color: rgba(245, 240, 217, 0.8);
 }
 
+.record-manager {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.record-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+#record-select {
+  min-width: 16rem;
+  padding: 0.75rem 1rem;
+  border-radius: 999px;
+  background: rgba(18, 24, 13, 0.85);
+  border: 1px solid rgba(47, 58, 29, 0.7);
+  color: #f7fbe1;
+}
+
+#save-record:disabled,
+#cancel-record:disabled {
+  cursor: not-allowed;
+}
+
+.record-form {
+  display: grid;
+  gap: 1rem;
+  padding: 1.25rem;
+  border-radius: 1.25rem;
+  background: rgba(18, 24, 13, 0.7);
+  border: 1px solid rgba(47, 58, 29, 0.55);
+}
+
+.record-form.is-editing {
+  box-shadow: 0 18px 32px rgba(0, 0, 0, 0.35);
+}
+
+.field-group {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.field-group label {
+  font-size: 0.85rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--mustard-300);
+}
+
+.field-group input[type='text'] {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  border-radius: 0.9rem;
+  border: 1px solid rgba(47, 58, 29, 0.7);
+  background: rgba(12, 16, 10, 0.9);
+  color: #f7fbe1;
+  font-size: 1rem;
+}
+
+.field-group input[type='text']:disabled {
+  opacity: 0.6;
+}
+
+.field-hint {
+  font-size: 0.8rem;
+  color: rgba(160, 169, 138, 0.85);
+  margin: 0;
+}
+
+.amount-input-wrapper {
+  position: relative;
+}
+
+.amount-input-wrapper input {
+  padding-right: 2.5rem;
+}
+
+.currency-suffix {
+  position: absolute;
+  top: 50%;
+  right: 1rem;
+  transform: translateY(-50%);
+  font-weight: 700;
+  color: var(--mustard-300);
+  pointer-events: none;
+}
+
+.record-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.record-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.record-list-empty {
+  text-align: center;
+  padding: 1rem;
+  border-radius: 1rem;
+  border: 1px dashed rgba(47, 58, 29, 0.65);
+  color: rgba(160, 169, 138, 0.85);
+  background: rgba(12, 16, 10, 0.6);
+}
+
+.record-list-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.85rem 1.1rem;
+  border-radius: 1rem;
+  border: 1px solid rgba(47, 58, 29, 0.65);
+  background: rgba(18, 24, 13, 0.75);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.record-list-item:hover,
+.record-list-item:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: 0 18px 32px rgba(0, 0, 0, 0.35);
+}
+
+.record-list-item.is-selected {
+  border-color: rgba(212, 160, 23, 0.9);
+  box-shadow: 0 0 0 2px rgba(212, 160, 23, 0.35);
+}
+
+.record-list-name {
+  font-weight: 600;
+  color: #f7fbe1;
+}
+
+.record-list-amount {
+  font-weight: 700;
+  color: var(--mustard-300);
+}
+
+@media (max-width: 640px) {
+  .record-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  #record-select {
+    width: 100%;
+  }
+}
+
 .card-header h2 {
   margin: 0;
   font-size: 1.75rem;
